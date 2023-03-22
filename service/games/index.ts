@@ -23,7 +23,7 @@ export const addNewGame = async (newGame: NewGame): Promise<string> => {
   const gameData = {
     ...newGame,
     id: ulid(),
-    average: 0,
+    // average: 0,
     createdById: player.id,
     gameStatus: Status.Started,
   };

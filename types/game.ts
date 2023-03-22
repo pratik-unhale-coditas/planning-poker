@@ -3,7 +3,7 @@ import { Status } from "./status";
 export interface Game {
   id: string;
   name: string;
-  average: number;
+  // average: number;
   gameStatus: Status;
   gameType?: GameType | GameType.Fibonacci;
   createdBy: string;

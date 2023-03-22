@@ -1,12 +1,14 @@
+import { addStoryToGame } from "@/service/story"
 import { useState } from "react"
 import Modal from "../modal"
 import styles from './addStoryModal.module.scss'
 
-const AddStoryModal = ({ handleCloseModal }: any) => {
+const AddStoryModal = ({ handleCloseModal, gameId }: any) => {
 
     const [storyName, setStoryName] = useState<string>("")
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        await addStoryToGame(gameId, storyName)
         handleCloseModal()
     }
 

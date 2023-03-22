@@ -12,7 +12,7 @@ import {
 import { Game } from "../types/game";
 import { Player } from "../types/player";
 import { doc, setDoc } from "firebase/firestore";
-import { omit } from "lodash";
+import { Story } from "@/types/story";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBsmR6Rr1UbvfIZyR2FHBNqNByVTjSfzEo",
@@ -31,6 +31,7 @@ export const db = getFirestore(app);
 
 const gamesCollectionName = "games";
 const playersCollectionName = "players";
+const storyCollectionName = "stories";
 
 export const addGameToStore = async (gameId: string, data: any) => {
   await setDoc(doc(db, gamesCollectionName, gameId), data);
@@ -67,6 +68,22 @@ export const getPlayersFromStore = async (
   return players;
 };
 
+export const getStoriesFromStore = async (gameId: string): Promise<Story[]> => {
+  const storiesRef = collection(
+    db,
+    gamesCollectionName,
+    gameId,
+    storyCollectionName
+  );
+  const storyDocs = await getDocs(storiesRef);
+  const stories: Story[] = [];
+  storyDocs.forEach((doc) => {
+    const story = doc.data() as Story;
+    stories.push(story);
+  });
+  return stories;
+};
+
 export const getPlayerFromStore = async (
   gameId: string,
   playerId: string
@@ -93,6 +110,9 @@ export const streamData = (id: string) => {
 export const streamPlayersFromStore = (id: string) => {
   return doc(db, `${gamesCollectionName}/${id}/${playersCollectionName}`);
 };
+export const streamStoriesFromStore = (id: string) => {
+  return doc(db, `${gamesCollectionName}/${id}/${storyCollectionName}`);
+};
 
 export const updateGameDataInStore = async (
   gameId: string,
@@ -109,6 +129,13 @@ export const addPlayerToGameInStore = async (
   await setDoc(
     doc(db, gamesCollectionName, gameId, playersCollectionName, player.id),
     player
+  );
+  return true;
+};
+export const addStoryToGameInStore = async (gameId: string, story: Story) => {
+  await setDoc(
+    doc(db, gamesCollectionName, gameId, storyCollectionName, story.id),
+    story
   );
   return true;
 };
@@ -131,6 +158,18 @@ export const updatePlayerInStore = async (gameId: string, player: Player) => {
   await updateDoc(
     doc(db, gamesCollectionName, gameId, playersCollectionName, player.id),
     playerData
+  );
+  return true;
+};
+
+export const updateStoryInStore = async (gameId: string, story: Story) => {
+  const storyData = {
+    ...story,
+    id: story.id,
+  };
+  await updateDoc(
+    doc(db, gamesCollectionName, gameId, storyCollectionName, story.id),
+    storyData
   );
   return true;
 };

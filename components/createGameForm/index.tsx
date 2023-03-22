@@ -1,7 +1,6 @@
 import { auth, db } from '@/repository/firebase';
 import { addNewGame } from '@/service/games';
 import { GameType, NewGame } from '@/types/game';
-import { Player } from '@/types/player';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -45,7 +44,6 @@ const CreateGameForm = () => {
     const onSubmit = async (e: any) => {
         e.preventDefault();
         if (gameTitle && currentPlayer) {
-            console.log("in")
             setIsLoading(true);
             const game: NewGame = {
                 name: gameTitle,
