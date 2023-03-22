@@ -1,0 +1,31 @@
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Rubik:wght@400;700&display=swap');
+
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  html {
+    height: 100vh;
+  }
+
+  body {
+    height: 100%;
+  }
+
+  #__next {
+    height: 100%;
+  }
+
+  .main {
+    /* width: 100vw;
+    height: 100vh; */
+    height: 100%;
+    background-color: rgb(255, 250, 245);
+    background-image: radial-gradient(#e5e5e5 10%, transparent 10%);
+    background-size: 1.5rem 1.5rem;
+    background-position: center;
+    background-repeat: repeat;
+  }

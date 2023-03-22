@@ -1,0 +1,39 @@
+.container {
+  width: 100%;
+  .sidebarItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    background-color: rgb(250, 249, 245);
+    border-top: 1px solid #ebe8e1;
+    border-bottom: 1px solid #ebe8e1;
+
+    a {
+      width: 100%;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: lightgray;
+      &:hover {
+        color: black;
+      }
+    }
+    .active {
+      color: black;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    display: flex;
+    width: 100%;
+    .sidebarItem {
+      padding: 0.5rem;
+      border: 1px solid #ebe8e1;
+      flex: 1;
+    }
+  }
+}

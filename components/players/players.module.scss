@@ -1,0 +1,12 @@
+.container {
+  padding: 1rem;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  overflow: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}

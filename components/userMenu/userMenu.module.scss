@@ -1,0 +1,52 @@
+.container {
+  position: relative;
+  .userButton {
+    padding: 0.5rem;
+    width: 10rem;
+
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: #027486;
+    font-weight: 500;
+    font-family: "Rubik", sans-serif;
+
+    img {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .userMenu {
+    position: absolute;
+    background-color: white;
+    padding: 1rem;
+    box-shadow: -4px 7px 4px -3px #bebbb4;
+    width: 10rem;
+    top: 3rem;
+    right: 0rem;
+    transition: 15ms;
+
+    .userMenuItem {
+      cursor: pointer;
+      border-radius: 8px;
+      width: 100%;
+      border: none;
+      padding: 0.25rem;
+      background: transparent;
+      color: #bebbb4;
+      font-size: 1rem;
+      color: #027486;
+      font-weight: 500;
+      text-align: start;
+
+      &:hover {
+        color: #003f49;
+      }
+    }
+  }
+}

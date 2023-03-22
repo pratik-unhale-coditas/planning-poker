@@ -1,0 +1,103 @@
+.container {
+  background-color: white;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.13) 0 0.25rem 1.5rem 0.25rem;
+  width: 29rem;
+  height: 27rem;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0rem;
+
+  .form {
+    .title {
+      text-align: center;
+      h2 {
+        font-size: 2rem;
+        color: #494949;
+        line-height: 1.1;
+        font-weight: 700;
+        font-family: "Rubik", sans-serif;
+      }
+    }
+
+    .main {
+      padding: 1rem;
+      flex-grow: 1;
+
+      .inputContainer {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .label {
+          font-size: 1rem;
+        }
+        .input {
+          padding: 0.5rem;
+
+          &:focus {
+            outline: 1px solid transparent;
+          }
+        }
+      }
+
+      .loginButtonContainer {
+        padding-top: 1rem;
+        .loginButton {
+          padding: 0.5rem;
+          background-color: orange;
+          color: white;
+          font-family: "";
+          width: 100%;
+          font-family: "Rubik", sans-serif;
+          font-weight: 900;
+          font-size: 1.5rem;
+          border: none;
+          border-radius: 0.5rem;
+          cursor: pointer;
+        }
+      }
+
+      .inputWarningMessage {
+        font-size: 0.75rem;
+        color: rgba(176, 52, 139, 0.8);
+        padding-left: 0.5rem;
+      }
+    }
+  }
+  .forgotPassword {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .forgotPasswordLink {
+      text-decoration: none;
+      cursor: pointer;
+      color: #3ba2b2;
+    }
+  }
+
+  .createNewAccount {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .createNewAccountLink {
+      text-decoration: none;
+      cursor: pointer;
+      color: #3ba2b2;
+      font-size: 2rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    .input {
+    }
+  }
+}

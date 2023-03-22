@@ -1,0 +1,37 @@
+.container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .title {
+    font-size: 2rem;
+    color: #494949;
+    line-height: 1.1;
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    padding-bottom: 1rem;
+  }
+
+  .createNewGame {
+    width: fit-content;
+    font-size: 2rem;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    background-color: rgb(29, 154, 27);
+    border-radius: 8px;
+    color: white;
+  }
+
+  .savedGamesContainer {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}

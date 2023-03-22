@@ -1,0 +1,23 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.46);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+
+  .modal_content {
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.12);
+    z-index: 999;
+  }
+
+  .modal_content::-webkit-scrollbar {
+    width: 12px !important;
+  }
+}
