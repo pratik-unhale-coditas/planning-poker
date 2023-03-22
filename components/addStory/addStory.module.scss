@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  .title {
+    background-color: #027486;
+    color: white;
+    padding: 1rem;
+    font-size: 1.5rem;
+  }
+  .storyList {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    .story {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid rgb(170, 170, 170);
+      border-radius: 8px;
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+  }
+
+  .addStory {
+    background-color: #027486;
+    color: white;
+    padding: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .footer {
+    text-align: end;
+    padding: 1rem;
+    font-size: 1rem;
+    color: rgb(141, 141, 141);
+    cursor: pointer;
+    &:hover {
+      color: rgb(51, 51, 51);
+    }
+  }
+}

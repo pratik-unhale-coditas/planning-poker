@@ -1,4 +1,3 @@
-import { Player } from "./player";
 import { Status } from "./status";
 
 export interface Game {

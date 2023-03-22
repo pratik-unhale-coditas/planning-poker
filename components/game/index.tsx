@@ -13,6 +13,7 @@ import Table from '../table'
 import styles from './game.module.scss'
 import { collection, getDocs } from "firebase/firestore";
 import Players from '../players'
+import AddStory from '../addStory'
 
 const Game = () => {
     const router = useRouter()
@@ -86,13 +87,18 @@ const Game = () => {
     return (
         <> {game && players && currentPlayerId ?
             <div className={styles["container"]}>
-                <Players game={game} players={players} currentPlayerId={currentPlayerId} />
-                <div className={styles["tableModuleContainer"]}>
-                    <div className={styles["table"]}>
-                        <Table game={game} currentPlayerId={currentPlayerId} players={players} />
+                <div className={styles["left"]}>
+                    <Players game={game} players={players} currentPlayerId={currentPlayerId} />
+                    <div className={styles["tableModuleContainer"]}>
+                        <div className={styles["table"]}>
+                            <Table game={game} currentPlayerId={currentPlayerId} players={players} />
+                        </div>
                     </div>
+                    <CardPicker game={game} players={players} currentPlayerId={currentPlayerId} />
                 </div>
-                <CardPicker game={game} players={players} currentPlayerId={currentPlayerId} />
+                <div className={styles["right"]}>
+                    <AddStory />
+                </div>
             </div>
             :
             <div>Game not found</div>
