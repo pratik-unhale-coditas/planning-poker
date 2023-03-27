@@ -3,11 +3,11 @@ import Link from 'next/link'
 
 import { removeGame } from '@/service/games';
 import { getPlayerRecentGamesFromStore } from '@/service/players';
-import Game from '../game';
 import SavedGameCard from '../savedGameCard';
 import styles from './savedGames.module.scss'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/repository/firebase';
+import { Game } from '@/types/game';
 
 const SavedGames = () => {
 
@@ -25,7 +25,7 @@ const SavedGames = () => {
         let fetchCleanup = true;
 
         async function fetchRecent() {
-            const games = await getPlayerRecentGamesFromStore(userId)
+            const games = await getPlayerRecentGamesFromStore(userId) as Game[]
             if (games && fetchCleanup) {
                 setRecentGames(games);
             }

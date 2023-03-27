@@ -125,7 +125,7 @@ export const getPlayerRecentGamesFromStore = async (userId: string) => {
 
     let player = await getUserFromStore(userId);
 
-    let playerGames = player?.games
+    let playerGames = player?.games as [string]
 
     if (playerGames) {
         await Promise.all(

@@ -218,7 +218,7 @@ export const updateUserGamesInStore = async (
   gameId: string
 ) => {
   const user = await getUserFromStore(userId);
-  const newGames = user?.games ? user?.games.push(gameId) : [gameId];
+  const newGames = user?.games ? [...user.games, gameId] : [gameId];
   const userData = {
     ...user,
     games: newGames,
