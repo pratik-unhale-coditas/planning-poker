@@ -15,12 +15,12 @@ import { doc, setDoc } from "firebase/firestore";
 import { IStory } from "@/types/story";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBsmR6Rr1UbvfIZyR2FHBNqNByVTjSfzEo",
-  authDomain: "planning-poker-7a973.firebaseapp.com",
-  projectId: "planning-poker-7a973",
-  storageBucket: "planning-poker-7a973.appspot.com",
-  messagingSenderId: "506854053336",
-  appId: "1:506854053336:web:f70cb59fbab30ba51e8ead",
+  apiKey: process.env.NEXT_PUBLIC_REACT_APP_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_REACT_APP_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_REACT_APP_APP_ID,
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
