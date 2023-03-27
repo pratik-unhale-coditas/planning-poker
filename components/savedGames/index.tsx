@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link'
 
 import { removeGame } from '@/service/games';
-import { getPlayerRecentGames } from '@/service/players';
+import { getPlayerRecentGamesFromStore } from '@/service/players';
 import Game from '../game';
 import SavedGameCard from '../savedGameCard';
 import styles from './savedGames.module.scss'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/repository/firebase';
 
 const SavedGames = () => {
+
+    const [user] = useAuthState(auth)
+    const userId = user?.uid as string
     const [recentGames, setRecentGames] = useState<Game[] | undefined>(undefined);
     const [reloadRecent, setReloadRecent] = useState<Boolean>(false);
 
@@ -20,7 +25,7 @@ const SavedGames = () => {
         let fetchCleanup = true;
 
         async function fetchRecent() {
-            const games = await getPlayerRecentGames();
+            const games = await getPlayerRecentGamesFromStore(userId)
             if (games && fetchCleanup) {
                 setRecentGames(games);
             }

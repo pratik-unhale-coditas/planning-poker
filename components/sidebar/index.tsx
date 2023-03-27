@@ -19,6 +19,12 @@ const Sidebar = () => {
                 Create Game
             </Link>
         </div>
+        <div className={styles["sidebarItem"]}>
+            <Link href={'/dashboard/account'} className={'/dashboard/account' === path ? styles["active"] : ""}>
+                <img src="./icons/user.svg" alt="" />
+                Account
+            </Link>
+        </div>
     </div>)
 }
 

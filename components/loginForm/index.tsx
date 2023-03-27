@@ -81,7 +81,11 @@ const LoginForm = () => {
                     </div>
                     <p className={styles["inputWarningMessage"]}>{errors.password?.message}</p>
                     <div className={styles["loginButtonContainer"]}>
-                        <button className={styles["loginButton"]} type='submit'>Log In</button>
+                        <button className={styles["loginButton"]} type='submit'>
+                            {loading ?
+                                "Loging In..." : "Log In"
+                            }
+                        </button>
                     </div>
                 </div>
             </form>

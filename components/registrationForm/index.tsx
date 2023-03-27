@@ -110,7 +110,11 @@ const RegistrationForm = () => {
                     </div>
                     <p className={styles["inputWarningMessage"]}>{errors.password?.message}</p>
                     <div className={styles["loginButtonContainer"]}>
-                        <button className={styles["loginButton"]} type='submit'>Sign Up</button>
+                        <button className={styles["loginButton"]} type='submit'>
+                            {loading ?
+                                "Signing... Up" : "Sign up"
+                            }
+                        </button>
                     </div>
                 </div>
             </form>

@@ -13,4 +13,3 @@ const DashboardPage = () => {
 DashboardPage.PageLayout = DashboardLayout
 
 export default DashboardPage
-

@@ -1,4 +1,4 @@
-import { addPlayerToGameInStore, getGameFromStore, getPlayerFromStore, getPlayersFromStore, getStoriesFromStore, removePlayerFromGameInStore, updatePlayerInStore, updateStoryInStore } from "@/repository/firebase";
+import { addPlayerToGameInStore, getGameFromStore, getPlayerFromStore, getPlayersFromStore, getStoriesFromStore, getUserFromStore, removePlayerFromGameInStore, updatePlayerInStore, updateStoryInStore } from "@/repository/firebase";
 import { getPlayerGamesFromCache, updatePlayerGamesInCache } from "@/repository/localStorage";
 import { Game } from "@/types/game";
 import { Player, PlayerGame } from "@/types/player";
@@ -119,21 +119,27 @@ export const addPlayerToGame = async (gameId: string, playerName: string): Promi
 //     });
 // };
 
-// export const getPlayerRecentGamesFromStore = async (): Promise<Game[]> => {
-//     let playerGames: PlayerGame[] = getPlayerGamesFromCache();
-//     let games: Game[] = [];
+export const getPlayerRecentGamesFromStore = async (userId: string) => {
+    // let playerGames: PlayerGame[] = getPlayerGamesFromCache();
+    let games: Game[] = [];
 
-//     await Promise.all(
-//         playerGames.map(async (playerGame: PlayerGame) => {
-//             const game = await getGameFromStore(playerGame.gameId);
+    let player = await getUserFromStore(userId);
 
-//             if (game) {
-//                 const player = await getPlayerFromStore(game.id, playerGame.playerId);
-//                 player && games.push(game);
-//             }
-//         })
-//     );
+    let playerGames = player?.games
 
-//     games.sort((a: Game, b: Game) => +b.createdAt - +a.createdAt);
-//     return games;
-// };
+    if (playerGames) {
+        await Promise.all(
+            playerGames.map(async (playerGame: string) => {
+                const game = await getGameFromStore(playerGame);
+
+                if (game) {
+                    // const player = await getPlayerFromStore(game.id, playerGame.playerId);
+                    games.push(game);
+                }
+            })
+        );
+
+        games.sort((a: Game, b: Game) => +b.createdAt - +a.createdAt);
+        return games;
+    }
+};

@@ -23,10 +23,11 @@ const AddStoryModal = ({ handleCloseModal, gameId, players }: IAddStoryModal) =>
     }
 
     return (<Modal onClose={handleCloseModal}>
+
         <div className={styles["container"]}>
             <div className={styles["header"]}>
                 <div className={styles["title"]}>Add new story</div>
-                <div className={styles["close"]} onClick={handleCloseModal}>X</div>
+                <div className={styles["close"]} onClick={handleCloseModal}> <img src="/icons/x.svg" alt="" /></div>
             </div>
             <div className={styles["inputContainer"]}>
                 <label className={styles["label"]}>Name</label>
