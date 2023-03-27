@@ -1,14 +1,24 @@
-import { addStoryToGame } from "@/service/story"
 import { useState } from "react"
-import Modal from "../modal"
-import styles from './addStoryModal.module.scss'
 
-const AddStoryModal = ({ handleCloseModal, gameId }: any) => {
+import Modal from "../modal"
+
+import { addStoryToGame } from "@/service/story"
+
+import styles from './addStoryModal.module.scss'
+import { Player } from "@/types/player"
+
+interface IAddStoryModal {
+    handleCloseModal: () => void,
+    gameId: string,
+    players: Player[]
+}
+
+const AddStoryModal = ({ handleCloseModal, gameId, players }: IAddStoryModal) => {
 
     const [storyName, setStoryName] = useState<string>("")
 
     const handleSubmit = async () => {
-        await addStoryToGame(gameId, storyName)
+        await addStoryToGame(gameId, storyName, players)
         handleCloseModal()
     }
 

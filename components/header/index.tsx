@@ -17,7 +17,7 @@ const Header = () => {
         <header className={styles["header"]}>
             <div className={styles["start"]}>
                 <div className={styles["logo"]} onClick={navigateToIndex}>
-                    <img src="./icons/planningPokerLogo.png" alt="" />
+                    <img src="/icons/planningPokerLogo.png" alt="" />
                 </div>
             </div>
             <div className={styles["end"]}>

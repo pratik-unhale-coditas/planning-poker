@@ -12,7 +12,7 @@ import {
 import { Game } from "../types/game";
 import { Player } from "../types/player";
 import { doc, setDoc } from "firebase/firestore";
-import { Story } from "@/types/story";
+import { IStory } from "@/types/story";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBsmR6Rr1UbvfIZyR2FHBNqNByVTjSfzEo",
@@ -32,6 +32,7 @@ export const db = getFirestore(app);
 const gamesCollectionName = "games";
 const playersCollectionName = "players";
 const storyCollectionName = "stories";
+const usersCollectionName = "users";
 
 export const addGameToStore = async (gameId: string, data: any) => {
   await setDoc(doc(db, gamesCollectionName, gameId), data);
@@ -68,7 +69,9 @@ export const getPlayersFromStore = async (
   return players;
 };
 
-export const getStoriesFromStore = async (gameId: string): Promise<Story[]> => {
+export const getStoriesFromStore = async (
+  gameId: string
+): Promise<IStory[]> => {
   const storiesRef = collection(
     db,
     gamesCollectionName,
@@ -76,9 +79,9 @@ export const getStoriesFromStore = async (gameId: string): Promise<Story[]> => {
     storyCollectionName
   );
   const storyDocs = await getDocs(storiesRef);
-  const stories: Story[] = [];
+  const stories: IStory[] = [];
   storyDocs.forEach((doc) => {
-    const story = doc.data() as Story;
+    const story = doc.data() as IStory;
     stories.push(story);
   });
   return stories;
@@ -132,10 +135,19 @@ export const addPlayerToGameInStore = async (
   );
   return true;
 };
-export const addStoryToGameInStore = async (gameId: string, story: Story) => {
+export const addStoryToGameInStore = async (gameId: string, story: IStory) => {
   await setDoc(
     doc(db, gamesCollectionName, gameId, storyCollectionName, story.id),
     story
+  );
+  return true;
+};
+export const removeStoryFromGameInStore = async (
+  gameId: string,
+  storyId: string
+) => {
+  await deleteDoc(
+    doc(db, gamesCollectionName, gameId, storyCollectionName, storyId)
   );
   return true;
 };
@@ -162,7 +174,7 @@ export const updatePlayerInStore = async (gameId: string, player: Player) => {
   return true;
 };
 
-export const updateStoryInStore = async (gameId: string, story: Story) => {
+export const updateStoryInStore = async (gameId: string, story: IStory) => {
   const storyData = {
     ...story,
     id: story.id,
@@ -188,4 +200,28 @@ export const removeGameFromStore = async (gameId: string) => {
   playerDocs.forEach((doc) => deleteDoc(doc.ref));
 
   return true;
+};
+
+////////////////////////////////////////
+export const getUserFromStore = async (userId: string) => {
+  const docRef = doc(db, usersCollectionName, userId);
+  const docSnap = await getDoc(docRef);
+  let user = undefined;
+  if (docSnap.exists()) {
+    user = docSnap.data();
+  }
+  return user;
+};
+
+export const updateUserGamesInStore = async (
+  userId: string,
+  gameId: string
+) => {
+  const user = await getUserFromStore(userId);
+  const newGames = user?.games ? user?.games.push(gameId) : [gameId];
+  const userData = {
+    ...user,
+    games: newGames,
+  };
+  await updateDoc(doc(db, usersCollectionName, userId), userData);
 };

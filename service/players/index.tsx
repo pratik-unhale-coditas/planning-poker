@@ -1,10 +1,8 @@
-import { addPlayerToGameInStore, getGameFromStore, getPlayerFromStore, getPlayersFromStore, removePlayerFromGameInStore, updatePlayerInStore } from "@/repository/firebase";
+import { addPlayerToGameInStore, getGameFromStore, getPlayerFromStore, getPlayersFromStore, getStoriesFromStore, removePlayerFromGameInStore, updatePlayerInStore, updateStoryInStore } from "@/repository/firebase";
 import { getPlayerGamesFromCache, updatePlayerGamesInCache } from "@/repository/localStorage";
 import { Game } from "@/types/game";
 import { Player, PlayerGame } from "@/types/player";
-import { Status } from "@/types/status";
 import { ulid } from "ulidx";
-import { updateGameStatus } from "../games";
 
 
 export const addPlayer = async (gameId: string, player: Player) => {
@@ -20,20 +18,7 @@ export const removePlayer = async (gameId: string, playerId: string) => {
         removePlayerFromGameInStore(gameId, playerId);
     }
 };
-export const updatePlayerValue = async (gameId: string, playerId: string, value: number) => {
-    const player = await getPlayerFromStore(gameId, playerId);
-    if (player) {
-        const updatedPlayer = {
-            ...player,
-            value: value,
-            status: Status.Finished,
-        };
-        await updatePlayerInStore(gameId, updatedPlayer);
-        await updateGameStatus(gameId);
-        return true;
-    }
-    return false;
-};
+
 
 export const getPlayerRecentGames = async (): Promise<Game[]> => {
     let playerGames: PlayerGame[] = getPlayerGamesFromCache();
@@ -62,13 +47,7 @@ export const getCurrentPlayerId = (gameId: string): string | undefined => {
     return game && game.playerId;
 };
 
-export const updatePlayerGames = (gameId: string, playerId: string) => {
-    let playerGames: PlayerGame[] = getPlayerGamesFromCache();
 
-    playerGames.push({ gameId, playerId });
-
-    updatePlayerGamesInCache(playerGames);
-};
 
 export const isCurrentPlayerInGame = async (gameId: string): Promise<boolean> => {
     const playerGames = getPlayerGamesFromCache();
@@ -91,6 +70,14 @@ export const isPlayerInGameStore = async (gameId: string, playerId: string) => {
     return player ? true : false;
 };
 
+export const updatePlayerGames = (gameId: string, playerId: string) => {
+    let playerGames: PlayerGame[] = getPlayerGamesFromCache();
+
+    playerGames.push({ gameId, playerId });
+
+    updatePlayerGamesInCache(playerGames);
+};
+
 export const removeGameFromCache = (gameId: string) => {
     const playerGames = getPlayerGamesFromCache();
     updatePlayerGamesInCache(playerGames.filter((playerGame) => playerGame.gameId !== gameId));
@@ -103,23 +90,50 @@ export const addPlayerToGame = async (gameId: string, playerName: string): Promi
         console.log('Game not found');
         return false;
     }
-    const newPlayer = { name: playerName, id: ulid(), status: Status.NotStarted };
+    const newPlayer = { name: playerName, id: ulid() };
 
     updatePlayerGames(gameId, newPlayer.id);
     await addPlayerToGameInStore(gameId, newPlayer);
 
+    const stories = await getStoriesFromStore(gameId);
+
+    stories.forEach((story) => {
+        let newStory = story
+        newStory.values[newPlayer.id] = null
+        updateStoryInStore(gameId, newStory)
+    })
+
     return true;
 };
 
-export const resetPlayers = async (gameId: string) => {
-    const players = await getPlayersFromStore(gameId);
+// export const resetPlayers = async (gameId: string) => {
+//     const players = await getPlayersFromStore(gameId);
 
-    players.forEach(async (player) => {
-        const updatedPlayer: Player = {
-            ...player,
-            status: Status.NotStarted,
-            value: 0,
-        };
-        await updatePlayerInStore(gameId, updatedPlayer);
-    });
-};
+//     players.forEach(async (player) => {
+//         const updatedPlayer: Player = {
+//             ...player,
+//             status: Status.NotStarted,
+//             value: 0,
+//         };
+//         await updatePlayerInStore(gameId, updatedPlayer);
+//     });
+// };
+
+// export const getPlayerRecentGamesFromStore = async (): Promise<Game[]> => {
+//     let playerGames: PlayerGame[] = getPlayerGamesFromCache();
+//     let games: Game[] = [];
+
+//     await Promise.all(
+//         playerGames.map(async (playerGame: PlayerGame) => {
+//             const game = await getGameFromStore(playerGame.gameId);
+
+//             if (game) {
+//                 const player = await getPlayerFromStore(game.id, playerGame.playerId);
+//                 player && games.push(game);
+//             }
+//         })
+//     );
+
+//     games.sort((a: Game, b: Game) => +b.createdAt - +a.createdAt);
+//     return games;
+// };

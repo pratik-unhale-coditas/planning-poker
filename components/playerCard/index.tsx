@@ -2,8 +2,8 @@ import { removePlayer } from "@/service/players";
 import { Game, GameType } from "@/types/game";
 import { Player } from "@/types/player";
 import { Status } from "@/types/status";
+import { IStory } from "@/types/story";
 import { isModerator } from "@/utils/isModerator";
-import { useContext } from "react";
 import { getCards } from "../constants/deck";
 import styles from "./playerCard.module.scss"
 
@@ -11,13 +11,15 @@ interface IPlayerCardProps {
     game: Game;
     player: Player;
     currentPlayerId: string;
+    currentStory: IStory
 }
 
-const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentPlayerId }) => {
+
+
+const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentPlayerId, currentStory }) => {
     const removeUser = (gameId: string, playerId: string) => {
         removePlayer(gameId, playerId);
     };
-
 
     return (<div
         className={[true ? styles["flipped"] : null, styles["card"]].join(" ")}
@@ -30,15 +32,13 @@ const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentPlayerId 
                 {player.name}
             </div>
             <div className={styles["value"]}>
-                {getCardValue(player, game)}
+                {getCardValue(player.id, currentStory, game)}
             </div>
         </div>
         {
             isModerator(game.createdById, currentPlayerId) &&
-                player.id !== currentPlayerId ?
-                <div className={styles["deleteButton"]}>Delete</div>
-                : null
-
+            player.id != currentPlayerId &&
+            <div className={styles["deleteButton"]}>Delete</div>
         }
 
     </div>)
@@ -46,17 +46,17 @@ const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentPlayerId 
 
 export default PlayerCard
 
-const getCardValue = (player: Player, game: Game) => {
-    if (game.gameStatus !== Status.Finished) {
-        return player.status === Status.Finished ? '👍' : '🤔';
+const getCardValue = (playerId: string, story: IStory, game: Game) => {
+    if (story.status !== Status.Finished) {
+        return story.values[playerId] === null ? '🤔' : '👍'
     }
 
-    if (game.gameStatus === Status.Finished) {
-        if (player.status === Status.Finished) {
-            if (player.value && player.value === -1) {
+    if (story.status === Status.Finished) {
+        if (story.values[playerId] !== null) {
+            if (story.values[playerId] === -1) {
                 return '☕'; // coffee emoji
             }
-            return getCardDisplayValue(game.gameType, player.value);
+            return getCardDisplayValue(game.gameType, story.values[playerId]);
         }
         return '🤔';
     }
@@ -64,7 +64,7 @@ const getCardValue = (player: Player, game: Game) => {
 
 const getCardDisplayValue = (
     gameType: GameType | undefined,
-    cardValue: number | undefined
-): string | number | undefined => {
+    cardValue: number | null
+): string | number | null => {
     return getCards(gameType).find((card) => card.value === cardValue)?.displayValue || cardValue;
 };

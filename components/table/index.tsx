@@ -1,7 +1,7 @@
-import { getPlayersFromStore } from '@/repository/firebase';
-import { finishGame, removeGame, resetGame } from '@/service/games';
+import { finishStory, removeStory, resetStory } from '@/service/story';
 import { Game } from '@/types/game';
 import { Player } from '@/types/player';
+import { IStory } from '@/types/story';
 import { isModerator } from '@/utils/isModerator';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react'
@@ -12,11 +12,11 @@ import styles from './table.module.scss'
 interface ITableProps {
     game: Game;
     currentPlayerId: string;
-    players: Player[]
+    players: Player[],
+    currentStory: IStory
 }
 
-const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players }) => {
-
+const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentStory }) => {
     const router = useRouter()
 
     const { gid } = router.query
@@ -34,40 +34,40 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players }) => {
             console.error('Failed to copy: ', error);
         }
     }
-    const leaveGame = () => {
-        router.push(`/dashboard`);
-    };
+
+
     const toggleDeleteModal = (value: boolean) => {
         setIsDeleteModalOpen(value)
     }
 
-    const handleRemoveGame = async (gameId: string) => {
-        await removeGame(gameId);
-        setTimeout(() => {
-            router.push('/dashboard')
-            window.location.reload()
-        }, 200
-        )
-    }
+
 
     const handleFinishGame = () => {
-        if (players.filter((player) => player.status !== "Finished").length === 0) {
-            finishGame(game.id)
-        } else {
+        if (Object.values(currentStory.values).includes(null)) {
             console.log("not finished")
+        } else {
+            finishStory(game.id, currentStory)
         }
     }
 
+    const handleRemoveStory = async (gameId: string, storyId: string) => {
+        await removeStory(gameId, storyId);
+    }
+
+    const leaveGame = () => {
+        router.push(`/dashboard`);
+    };
+
     return (<div className={styles["table"]}>
         <div className={styles["infoContainer"]}>
-            <div className={styles["title"]}>{game.name}</div>
-            <div className={styles["result"]}>Result : {game.average || 0}</div>
+            <div className={styles["title"]}>{currentStory?.name}</div>
+            <div className={styles["result"]}>Average : {currentStory?.average || 0}</div>
         </div>
         {isModerator(game.createdById, currentPlayerId) ?
             <div className={styles["utilityContainer"]}>
                 <div className={styles['utilityItem']} onClick={handleFinishGame}>
                     <div className={styles["utilityIcon"]}>
-                        <img src="./icons/eye.svg" alt="" />
+                        <img src="/icons/eye.svg" alt="" />
                     </div>
                     <p>Reveal</p>
                 </div>
@@ -76,15 +76,16 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players }) => {
                         () => toggleDeleteModal(true)
                     }>
                     <div className={styles["utilityIcon"]}>
-                        <img src="./icons/trash.svg" alt="" />
+                        <img src="/icons/trash.svg" alt="" />
                     </div>
                     <p>Delete</p>
                 </div>
                 <div className={styles['utilityItem']}
-                    onClick={() => resetGame(game.id)}
+                    onClick={() => resetStory(game.id, currentStory
+                    )}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="./icons/refresh.svg" alt="" />
+                        <img src="/icons/refresh.svg" alt="" />
                     </div>
                     <p>Reset</p>
                 </div>
@@ -92,14 +93,14 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players }) => {
                     onClick={() => leaveGame()}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="./icons/logout.svg" alt="" />
+                        <img src="/icons/logOut.svg" alt="" />
                     </div>
                     Exit</div>
                 <div className={styles['utilityItem']}
                     onClick={() => copyInviteLink()}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="./icons/link.svg" alt="" />
+                        <img src="/icons/link.svg" alt="" />
                     </div>
                     Invite</div>
             </div>
@@ -109,7 +110,7 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players }) => {
                     onClick={() => leaveGame()}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="./icons/logout.svg" alt="" />
+                        <img src="/icons/logout.svg" alt="" />
                     </div>
                     Exit</div>
             </div>
@@ -119,9 +120,9 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players }) => {
             isDeleteModalOpen ?
                 <DeleteModal
                     closeModalCallBack={toggleDeleteModal}
-                    title={`Delete ${game.name}`}
+                    title={`Delete ${currentStory.name}`}
                     handleDeleteCallback={
-                        () => handleRemoveGame(game.id)
+                        () => handleRemoveStory(game.id, currentStory.id)
                     }
                 />
                 :

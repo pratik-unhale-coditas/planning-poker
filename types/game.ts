@@ -4,7 +4,7 @@ export interface Game {
   id: string;
   name: string;
   // average: number;
-  gameStatus: Status;
+  // gameStatus: Status;
   gameType?: GameType | GameType.Fibonacci;
   createdBy: string;
   createdById: string;

@@ -54,7 +54,7 @@ const RegistrationForm = () => {
             if (db) {
                 const res = await createUserWithEmailAndPassword(email, password)
                 if (res) {
-                    const setRes = await setDoc(doc(db, "users", res.user.uid), {
+                    await setDoc(doc(db, "users", res.user.uid), {
                         firstName: firstName,
                         lastName: lastName,
                         email: email,

@@ -13,7 +13,6 @@ const Snackbar = ({ message, showSnackbar, hideSnackbar }: any) => {
             }, 2000);
         }
     }, [showSnackbar, hideSnackbar]);
-    console.log(show)
     return (
         <div className={show ? styles["snackbar"] : styles["snackbarHidden"]}>
             <div className={styles["message"]}>{message}</div>

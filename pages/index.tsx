@@ -12,7 +12,6 @@ export default function Home() {
 
   const navigateTo = () => {
     router.push('/dashboard')
-    console.log('haha')
   }
 
   useEffect(() => {

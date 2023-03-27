@@ -9,6 +9,7 @@ export const getPlayerGamesFromCache = (): PlayerGame[] => {
   if (store) {
     playerGames = JSON.parse(store);
   }
+
   return playerGames;
 };
 

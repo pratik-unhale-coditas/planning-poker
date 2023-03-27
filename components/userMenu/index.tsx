@@ -26,9 +26,6 @@ const UserMenu = ({ userId }: IUserMenuProps) => {
         }
     }
 
-
-
-
     const router = useRouter()
     const [open, setOpen] = useState(false)
 
@@ -49,7 +46,6 @@ const UserMenu = ({ userId }: IUserMenuProps) => {
 
     useEffect(() => {
         document.addEventListener("click", handleClick);
-
         return () => {
             document.removeEventListener("click", handleClick);
         };
@@ -70,7 +66,7 @@ const UserMenu = ({ userId }: IUserMenuProps) => {
         >
             <button className={styles["userButton"]} onClick={() => setOpen(!open)}>
                 {user ? `${user.firstName} ${user.lastName}` : 'User'}
-                {open ? <img src="./icons/chevronUp.svg" alt="" /> : <img src="./icons/chevronDown.svg" alt="" />}
+                {open ? <img src="/icons/chevronUp.svg" alt="" /> : <img src="/icons/chevronDown.svg" alt="" />}
             </button>
             {open ? <div className={styles['userMenu']}>
                 <button className={styles["userMenuItem"]}

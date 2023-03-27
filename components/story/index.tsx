@@ -1,19 +1,29 @@
-import { getStoriesFromStore } from '@/repository/firebase'
+import { removeStory } from '@/service/story'
 import { IStory } from '@/types/story'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import AddStoryModal from '../addStoryModal'
 import styles from './story.module.scss'
+import DeleteModal from "../deleteModal"
+import { Game } from '@/types/game'
+import { isModerator } from '@/utils/isModerator'
+import { Player } from '@/types/player'
 
 interface IStoryProps {
     stories: IStory[] | undefined,
-    gameId: string,
+    game: Game,
     selectedStory: IStory | undefined,
-    handleStorySelect: any
+    handleStorySelect: any,
+    currentPlayerId: string,
+    players: Player[]
 }
 
-const Story = ({ stories, gameId, selectedStory, handleStorySelect }: IStoryProps) => {
+const Story = ({ stories, game, selectedStory, handleStorySelect,
+    currentPlayerId,
+    players }: IStoryProps) => {
     const [isAddStoryModalOpen, setIsAddStoryModalOpen] = useState(false)
+    const [isDeleteStoryModalOpen, setIsDeleteStoryModalOpen] = useState(false)
+
     const router = useRouter()
     const leaveGame = () => {
         router.push(`/dashboard`);
@@ -34,20 +44,48 @@ const Story = ({ stories, gameId, selectedStory, handleStorySelect }: IStoryProp
                         >
                             <div className={styles["storyName"]}>{story.name}</div>
                             <div className={styles["storyAverage"]}>{story.average}</div>
+                            {/* <div
+                                className={styles["deleteStory"]}
+                                onClick={() => setIsDeleteStoryModalOpen(!isDeleteStoryModalOpen)}
+                            >
+                                <img src="./icons/trash.svg" />
+                            </div> */}
                         </div>
                     )
                 })
             }
 
         </div>
-        <div className={styles["addStory"]} onClick={() => setIsAddStoryModalOpen(!isAddStoryModalOpen)}>
-            + Add Story
-        </div>
-        <div className={styles["footer"]} onClick={leaveGame}>
-            X End Game
-        </div>
         {
-            isAddStoryModalOpen ? <AddStoryModal gameId={gameId} handleCloseModal={() => setIsAddStoryModalOpen(false)}></AddStoryModal> : null
+            isModerator(game.createdById, currentPlayerId) ? <>
+                <div className={styles["addStory"]} onClick={() => setIsAddStoryModalOpen(!isAddStoryModalOpen)}>
+                    + Add Story
+                </div>
+                <div className={styles["footer"]} onClick={leaveGame}>
+                    X End Game
+                </div>
+            </>
+                : null
+        }
+
+
+        {
+            isAddStoryModalOpen ? <AddStoryModal
+                gameId={game.id}
+                handleCloseModal={() => setIsAddStoryModalOpen(false)}
+                // currentPlayerId={currentPlayerId}
+                players={players}
+            ></AddStoryModal> : null
+        }
+        {
+            isDeleteStoryModalOpen && selectedStory ?
+                <DeleteModal
+                    closeModalCallBack={() => setIsDeleteStoryModalOpen(false)}
+                    title={`Delete ${selectedStory.name}`}
+                    handleDeleteCallback={
+                        () => removeStory(game.id, selectedStory.id)
+                    }
+                /> : null
         }
     </div>)
 }

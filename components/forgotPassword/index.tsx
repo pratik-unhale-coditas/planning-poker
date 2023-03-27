@@ -5,6 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from "yup";
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { auth } from '@/repository/firebase';
+import { useState } from 'react';
+import Link from 'next/link';
 
 
 const schema = Yup.object({
@@ -15,6 +17,8 @@ const schema = Yup.object({
 
 
 const ForgotPassword = () => {
+    const [userEmail, setUserEmail] = useState("")
+    const [isPasswordResetSuccessfull, setIsPasswordResetSuccessfull] = useState(false)
     const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
         auth
     );
@@ -34,7 +38,7 @@ const ForgotPassword = () => {
             );
 
             if (res) {
-                alert("reset password email sent")
+                setIsPasswordResetSuccessfull(true)
             }
         } catch (e) {
             console.log(e)
@@ -43,30 +47,45 @@ const ForgotPassword = () => {
 
     const handleEmailChange = (event: any) => {
         setValue('email', event?.target.value)
+        setUserEmail(event.target.value)
     }
 
 
     return (
-        <form className={styles["container"]}
-            onSubmit={handleSubmit(onSubmit)}
-        >
-            <div className={styles["header"]}>
-                <h2>Reset Your Password</h2>
-            </div>
-            <div className={styles["main"]}>
-                <div className={styles["description"]}>
-                    <p>Enter the work email you used to sign up, and we will send you a new password</p>
+        isPasswordResetSuccessfull ?
+            <div className={styles["successContainer"]}>
+                <h2>Password Reset Link Sent!</h2>
+                <p>A password reset link has been sent to {userEmail || "your email"}.</p>
+                <p>Please check your email and follow the instructions provided to reset your password.</p>
+                { /*eslint-disable-next-line react/no-unescaped-entities */}
+                <p>If you don't see the email in your inbox, be sure to check your spam or junk folder.</p>
+                <p>Thank you for using our website!</p>
+                {/* <div className={styles["loginPageLink"]}> */}
+                <Link href={'/'} className={styles["loginPageLink"]}>Go back to login page</Link>
+                {/* </div> */}
+            </div> :
+            <form className={styles["container"]}
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <div className={styles["header"]}>
+                    <h2>Reset Your Password</h2>
                 </div>
-                <div className={styles["inputContainer"]}>
-                    <label className={styles["label"]}>Work Email</label>
-                    <input name="email" className={styles["input"]} type={"email"} onChange={handleEmailChange} />
+                <div className={styles["main"]}>
+                    <div className={styles["description"]}>
+                        <p>Enter the work email you used to sign up, and we will send you a new password</p>
+                    </div>
+                    <div className={styles["inputContainer"]}>
+                        <label className={styles["label"]}>Work Email</label>
+                        <input name="email" className={styles["input"]} type={"email"} onChange={handleEmailChange} />
+                    </div>
+                    <p className={styles["inputWarningMessage"]}>{errors.email?.message}</p>
+                    <div className={styles["submitButtonContainer"]}>
+                        <button className={styles["submitButton"]}>Send New Password</button>
+                    </div>
                 </div>
-                <p className={styles["inputWarningMessage"]}>{errors.email?.message}</p>
-                <div className={styles["submitButtonContainer"]}>
-                    <button className={styles["submitButton"]}>Send New Password</button>
-                </div>
-            </div>
-        </form>)
+            </form>
+
+    )
 }
 
 export default ForgotPassword

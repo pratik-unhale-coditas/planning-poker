@@ -57,3 +57,11 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .container {
+    .storyList {
+      padding: 1.5rem;
+    }
+  }
+}

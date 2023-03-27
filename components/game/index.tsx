@@ -1,4 +1,4 @@
-import { auth, db } from '@/repository/firebase'
+import { db } from '@/repository/firebase'
 import { streamGame } from '@/service/games'
 import { getCurrentPlayerId } from '@/service/players'
 import { Game } from '@/types/game'
@@ -8,18 +8,22 @@ import { doc, onSnapshot } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import CardPicker from '../cardPicker'
-import PlayerCard from '../playerCard'
 import Table from '../table'
 import styles from './game.module.scss'
-import { collection, getDocs } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 import Players from '../players'
 import Story from '../story'
 import { IStory } from '@/types/story'
+import Image from 'next/image'
+import { isModerator } from '@/utils/isModerator'
 
-const Game = () => {
+interface IGameProps {
+    gid: string
+}
 
+const Game = ({ gid }: IGameProps) => {
     const router = useRouter()
-    const { gid } = router.query
+
     const [game, setGame] = useState<Game | undefined>(undefined);
     const [players, setPlayers] = useState<Player[] | undefined>(undefined);
     const [stories, setStories] = useState<IStory[] | undefined>([])
@@ -35,7 +39,6 @@ const Game = () => {
             if (!currentPlayerId) {
                 router.push(`/join/${gid}`);
             }
-
             setCurrentPlayerId(currentPlayerId);
             setIsLoading(true);
         }
@@ -68,9 +71,9 @@ const Game = () => {
                 players.push(doc.data() as Player);
             });
             const currentPlayerId = getCurrentPlayerId(gid as string);
-            // if (!players.find((player) => player.id === currentPlayerId)) {
-            //     router.push(`/join/${gid}`);
-            // }
+            if (!players.find((player) => player.id === currentPlayerId)) {
+                router.push(`/join/${gid}`);
+            }
             setPlayers(players);
 
         });
@@ -88,7 +91,6 @@ const Game = () => {
             snapshot.forEach((doc) => {
                 stories.push(doc.data() as IStory);
             });
-            console.log(stories)
             setStories(stories);
 
         });
@@ -101,6 +103,24 @@ const Game = () => {
         };
     }, [gid, router]);
 
+
+
+    useEffect(() => {
+        if (stories && !currentStory) {
+            setCurrentStory(stories[0])
+        }
+        else if (currentStory) {
+            let newCurrentStory = stories?.find((story) => story.id === currentStory.id)
+            if (newCurrentStory) {
+                setCurrentStory(newCurrentStory)
+            } else {
+                if (stories) {
+                    setCurrentStory(stories[0])
+                }
+            }
+        }
+    }, [stories])
+
     if (loading) {
         return (
             <div className='PokerLoading'>
@@ -108,33 +128,72 @@ const Game = () => {
             </div>
         );
     }
+
+
     return (
         <> {game && players && currentPlayerId ?
             <div className={styles["container"]}>
                 <div className={styles["gameTitle"]}>
-                    {game.name}
+                    <p>  {game.name}</p>
                 </div>
                 <div className={styles["left"]}>
 
-                    {stories?.length as number > 0 ?
+                    {stories?.length as number > 0 && currentStory ?
                         <>
-                            <Players game={game} players={players} currentPlayerId={currentPlayerId} />
+                            <Players
+                                game={game}
+                                players={players}
+                                currentPlayerId={currentPlayerId}
+                                currentStory={currentStory}
+                            />
                             <div className={styles["tableModuleContainer"]}>
                                 <div className={styles["table"]}>
-                                    <Table game={game} currentPlayerId={currentPlayerId} players={players} />
+                                    <Table
+                                        game={game}
+                                        currentPlayerId={currentPlayerId}
+                                        players={players}
+                                        currentStory={currentStory} />
                                 </div>
                             </div>
-                            <CardPicker game={game} players={players} currentPlayerId={currentPlayerId} />
+                            <CardPicker
+                                game={game}
+                                players={players}
+                                currentPlayerId={currentPlayerId}
+                                currentStory={currentStory}
+                            />
                         </>
                         :
-                        <div className={styles["addStoryPrompt"]}>Add a story to start playing
+                        <div className={styles["addStoryPrompt"]}>
+                            <div>
+                                < Image
+                                    src='/icons/emptyState.png'
+                                    alt='emptyStateImage'
+                                    width={250}
+                                    height={250} />
+                                {/* <img src="../../public/icons/emptyState.png" alt="" /> */}
+                                {/* <img src="./icons/emptyState.png" alt="" /> */}
+                            </div>
+                            <p>Oops! No story found</p>
+                            {
+                                isModerator(game.createdById, currentPlayerId) ?
+                                    <p>Add your first story to get started</p>
+                                    :
+                                    <p>Wait for the moderator to add a story to get started</p>
+                            }
                         </div>
                     }
                 </div>
 
 
                 <div className={styles["right"]}>
-                    <Story stories={stories} gameId={game.id} selectedStory={currentStory} handleStorySelect={setCurrentStory} />
+                    <Story
+                        stories={stories}
+                        game={game}
+                        selectedStory={currentStory}
+                        handleStorySelect={setCurrentStory}
+                        currentPlayerId={currentPlayerId}
+                        players={players}
+                    />
                 </div>
             </div>
             :

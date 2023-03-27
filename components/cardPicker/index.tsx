@@ -1,23 +1,25 @@
 import Card from "../card"
 
-import { updatePlayerValue } from "@/service/players";
 import { CardConfig, getCards } from "../constants/deck";
 
 import styles from './cardDeck.module.scss'
 
 import { ICardPickerProps } from "./cardPicker.types";
 import { Status } from "@/types/status";
+import { updatePlayerValue } from "@/service/story";
 
 
 
 
-const CardPicker: React.FC<ICardPickerProps> = ({ game, players, currentPlayerId }) => {
+const CardPicker: React.FC<ICardPickerProps> = ({ game, players, currentPlayerId, currentStory }) => {
 
     const playPlayer = (cardValue: number) => {
-        if (game.gameStatus !== Status.Finished) {
-            updatePlayerValue(game.id, currentPlayerId, cardValue);
+        if (currentStory.status !== Status.Finished) {
+            updatePlayerValue(game.id, currentStory, currentPlayerId, cardValue);
         }
     };
+
+    const currentPlayerValue = currentStory.values[currentPlayerId]
     const cards = getCards(game.gameType);
 
     return (<div className={styles["container"]}>
@@ -25,9 +27,8 @@ const CardPicker: React.FC<ICardPickerProps> = ({ game, players, currentPlayerId
             cards.map((card: CardConfig, i) => {
                 let isSelected = false
 
-                const player = players.find((player) => player.id === currentPlayerId);
 
-                if (player && player.value !== undefined && player.value === card.value) {
+                if (currentPlayerValue === card.value) {
                     isSelected = true
                 }
 
