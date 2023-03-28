@@ -10,7 +10,10 @@
     border-bottom: 1px solid #ebe8e1;
 
     a {
-      padding: 0rem 1.75rem;
+      .sidebarItemTitle {
+        flex-grow: 1;
+      }
+      padding: 0rem 1.5rem;
       width: 100%;
       text-decoration: none;
       display: flex;

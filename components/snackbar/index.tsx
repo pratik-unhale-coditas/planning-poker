@@ -10,7 +10,7 @@ const Snackbar = ({ message, showSnackbar, hideSnackbar }: any) => {
             setTimeout(() => {
                 setShow(false);
                 hideSnackbar();
-            }, 2000);
+            }, 3000);
         }
     }, [showSnackbar, hideSnackbar]);
     return (

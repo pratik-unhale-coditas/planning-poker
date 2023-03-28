@@ -10,19 +10,25 @@ const Sidebar = () => {
         <div className={styles["sidebarItem"]}>
             <Link href={'/dashboard'} className={'/dashboard' === path ? styles["active"] : ""}>
                 <img src="./icons/save.svg" alt="" />
-                Saved Games
+                <div className={styles["sidebarItemTitle"]}>
+                    Saved Games
+                </div>
             </Link>
         </div>
         <div className={styles["sidebarItem"]}>
             <Link href={'/dashboard/createNewGame'} className={'/dashboard/createNewGame' === path ? styles["active"] : ""}>
                 <img src="./icons/play.svg" alt="" />
-                Create Game
+                <div className={styles["sidebarItemTitle"]}>
+                    Create Game
+                </div>
             </Link>
         </div>
         <div className={styles["sidebarItem"]}>
             <Link href={'/dashboard/account'} className={'/dashboard/account' === path ? styles["active"] : ""}>
                 <img src="./icons/user.svg" alt="" />
-                Account
+                <div className={styles["sidebarItemTitle"]}>
+                    Account
+                </div>
             </Link>
         </div>
     </div>)

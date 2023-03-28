@@ -93,7 +93,9 @@ const CreateGameForm = () => {
                         className={isCreateButtonActive() ? styles["createButtonActive"] : styles["createButton"]}
                         type={'submit'}
                         disabled={!isCreateButtonActive()}
-                    >Create
+                    >{isLoading ?
+                        'Creating...' : 'Create'
+                        }
                     </button>
                 </div>
             </form>

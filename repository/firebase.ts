@@ -225,3 +225,7 @@ export const updateUserGamesInStore = async (
   };
   await updateDoc(doc(db, usersCollectionName, userId), userData);
 };
+export const updateUserDataInStore = async (userId: string, data: any) => {
+  await updateDoc(doc(db, usersCollectionName, userId), data);
+  return true;
+};

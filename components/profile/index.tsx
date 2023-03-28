@@ -1,37 +1,54 @@
-import { auth, getUserFromStore } from "@/repository/firebase"
+import { auth, getUserFromStore, updateUserDataInStore } from "@/repository/firebase"
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useEffect, useState } from "react"
 import { useAuthState, useUpdatePassword } from "react-firebase-hooks/auth"
+import { useForm } from "react-hook-form"
 import styles from "./profile.module.scss"
+import * as Yup from "yup";
+import Snackbar from "../snackbar"
+
 
 const Profile = () => {
     const [updatePassword, updating, error] = useUpdatePassword(auth);
 
+
     const [user] = useAuthState(auth)
-    const [email, setEmail] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
+
+    const [currentUser, setCurrentUser] = useState<any>()
+
     const [isEditingPassword, setIsEditingPassword] = useState(false)
     const [isEditingPersonalDetails, setIsEditingPersonalDetails] = useState(false)
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
+    const [showSnackbar, setShowSnackbar] = useState(false)
 
     const getUser = async () => {
         const currentUser = await getUserFromStore(user?.uid as string)
         if (currentUser) {
-            setEmail(currentUser.email)
-            setFirstName(currentUser.firstName)
-            setLastName(currentUser.lastName)
+            setCurrentUser(currentUser)
+        }
+    }
+    const handleUpdateProfile = async (data: any) => {
+        console.log(data)
+        const res = await updateUserDataInStore(user?.uid as string, data)
+        if (res) {
+            setIsEditingPersonalDetails(false)
         }
     }
 
-
-    const handleUpdatePassword = async () => {
-        if (password && confirmPassword && confirmPassword === password) {
+    const handleUpdatePassword = async (data: IPasswordFormValues) => {
+        const { password } = data
+        try {
             const success = await updatePassword(password);
             if (success) {
                 setIsEditingPassword(false)
+                setShowSnackbar(true)
+            } else if (error) {
+                setShowSnackbar(true)
             }
+        } catch (e) {
+
+            setShowSnackbar(true)
         }
+
     }
 
     useEffect(() => { getUser() }, [])
@@ -53,50 +70,19 @@ const Profile = () => {
                         : null
                     }
                 </div>
-                <div className={styles["inputContainer"]}>
-                    <label className={styles["label"]}>Email</label>
-                    <input
-                        name="email"
-                        className={styles["input"]}
-                        type={"email"}
-                        onChange={(e) => console.log(e.target.value)}
-                        defaultValue={email}
-                        disabled={!isEditingPersonalDetails} />
-                </div>
-                <div className={styles["nameContainer"]}>
-                    <div className={styles["inputContainer"]}>
-                        <label className={styles["label"]}>First Name</label>
-                        <input
-                            name="firstName"
-                            className={styles["input"]}
-                            type={"text"}
-                            onChange={(e) => console.log(e.target.value)}
-                            defaultValue={firstName}
-                            disabled={!isEditingPersonalDetails} />
-                    </div>
-                    <div className={styles["inputContainer"]}>
-                        <label className={styles["label"]}>Last Name</label>
-                        <input
-                            name="lastName"
-                            className={styles["input"]}
-                            type={"text"}
-                            onChange={(e) => console.log(e.target.value)}
-                            defaultValue={lastName}
-                            disabled={!isEditingPersonalDetails} />
-                    </div>
-                </div>
-                {isEditingPersonalDetails ?
-                    <div className={styles["actionsContainer"]}>
-                        <button
-                            onClick={() => setIsEditingPersonalDetails(false)}
-                            className={styles["saveButton"]}
-                        >Save</button>
-                        <button
-                            onClick={() => setIsEditingPersonalDetails(false)}
-                            className={styles["cancelButton"]}
-                        >Cancel</button>
-                    </div> : null
+                {
+                    currentUser ?
+                        <ProfileDetailsForm
+                            email={currentUser.email}
+                            firstName={currentUser.firstName}
+                            lastName={currentUser.lastName}
+                            onSubmit={handleUpdateProfile}
+                            onCancel={() => setIsEditingPersonalDetails(false)}
+                            isEditing={isEditingPersonalDetails}
+                        />
+                        : null
                 }
+
                 <div className={styles["subTitle"]}>
                     <h3>
                         Password
@@ -110,40 +96,169 @@ const Profile = () => {
                     }
                 </div>
                 <div className={isEditingPassword ? styles["passwordSection"] : styles["passwordSectionHidden"]}>
-                    <div className={styles["passwordContainer"]}>
-                        <div className={styles["inputContainer"]}>
-                            <label className={styles["label"]}>New Password</label>
-                            <input
-                                name="password"
-                                className={styles["input"]}
-                                type={"password"}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                        <div className={styles["inputContainer"]}>
-                            <label className={styles["label"]}>Confirm Password</label>
-                            <input
-                                name="confirmPassword"
-                                className={styles["input"]}
-                                type={"text"}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className={styles["actionsContainer"]}>
-                        <button
-                            onClick={handleUpdatePassword}
-                            className={styles["saveButton"]}
-                        >Save</button>
-                        <button
-                            onClick={() => setIsEditingPassword(false)}
-                            className={styles["cancelButton"]}
-                        >Cancel</button>
-                    </div>
+
+                    <PasswordForm
+                        onSubmit={handleUpdatePassword}
+                        onCancel={() => setIsEditingPassword(false)}
+                    />
                 </div>
             </div>
-
+            {
+                showSnackbar ? <Snackbar message={error ? `Error :- ${error}` : "Password changed successfully"} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
+            }
         </div>)
 }
 
 export default Profile
+//////////////////////////////////////////////////////////////////////////
+type IProfileDetailsFormValues = {
+    // email: string;
+    firstName: string;
+    lastName: string;
+};
+
+interface IProfileDetailsFormProps {
+    email: string;
+    firstName: string;
+    lastName: string;
+    onSubmit: (data: IProfileDetailsFormValues) => void;
+    onCancel: () => void;
+    isEditing: boolean
+}
+const IProfileDetailsSchema = Yup.object().shape({
+    // email: Yup.string().email().required(),
+    firstName: Yup.string().required(),
+    lastName: Yup.string().required(),
+});
+
+export const ProfileDetailsForm = ({ email, firstName, lastName, onSubmit, onCancel, isEditing }: IProfileDetailsFormProps) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IProfileDetailsFormValues>({
+        resolver: yupResolver(IProfileDetailsSchema),
+        defaultValues: {
+            // email,
+            firstName,
+            lastName,
+        },
+    });
+
+
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className={styles["inputContainer"]}>
+                <label className={styles["label"]}>Email</label>
+                <input
+                    disabled
+                    className={styles["input"]}
+                    value={email}
+                // type={"email"}
+                // {...register('email')}
+                />
+                {/* {errors.email && (
+                    <span className="text-red-500 text-sm">{errors.email.message}</span>
+                )} */}
+            </div>
+            <div className={styles["nameContainer"]}>
+                <div className={styles["inputContainer"]}>
+                    <label className={styles["label"]}>First Name</label>
+                    <input
+                        disabled={!isEditing}
+                        className={styles["input"]}
+                        type={"text"}
+                        {...register('firstName')}
+                    />
+                    {errors.firstName && (
+                        <span className="text-red-500 text-sm">{errors.firstName.message}</span>
+                    )}
+                </div>
+                <div className={styles["inputContainer"]}>
+                    <label className={styles["label"]}>Last Name</label>
+                    <input
+                        disabled={!isEditing}
+                        className={styles["input"]}
+                        type={"text"}
+                        {...register('lastName')}
+                    />
+
+                    {errors.lastName && (
+                        <span className="text-red-500 text-sm">{errors.lastName.message}</span>
+                    )}
+                </div>
+            </div>
+            {isEditing ?
+                <div className={styles["actionsContainer"]}>
+                    <button type="submit" className={styles["saveButton"]}>Save</button>
+                    <button type="button" onClick={onCancel} className={styles["cancelButton"]}>Cancel</button>
+                </div> : null
+            }
+        </form>
+    );
+};
+//////////////////////////////////////////////////////////////
+const passwordSchema = Yup.object().shape({
+    password: Yup.string().required("Please enter a new password"),
+    confirmPassword: Yup
+        .string()
+        .oneOf([Yup.ref("password")], "Passwords must match")
+        .required("Please confirm your new password"),
+});
+type IPasswordFormValues = {
+    password: string,
+    confirmPassword: string
+};
+
+export const PasswordForm = ({ onSubmit, onCancel }: any) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm<IPasswordFormValues>({
+        resolver: yupResolver(passwordSchema),
+        defaultValues: {
+            password: "",
+            confirmPassword: ""
+        },
+    });
+    const handleCancel = () => {
+        onCancel()
+        reset()
+    }
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+
+            <div className={styles["passwordContainer"]}>
+                <div className={styles["inputContainer"]}>
+                    <label className={styles["label"]}>Password</label>
+                    <input
+                        className={styles["input"]}
+                        type={"password"}
+                        {...register('password')}
+                    />
+                    {errors.password && (
+                        <span className="text-red-500 text-sm">{errors.password.message}</span>
+                    )}
+                </div>
+                <div className={styles["inputContainer"]}>
+                    <label className={styles["label"]}>Confirm Password</label>
+                    <input
+                        className={styles["input"]}
+                        type={"text"}
+                        {...register('confirmPassword')}
+                    />
+                    {errors.confirmPassword && (
+                        <span className="text-red-500 text-sm">{errors.confirmPassword.message}</span>
+                    )}
+                </div>
+            </div>
+            <div className={styles["actionsContainer"]}>
+                <button type="submit" className={styles["saveButton"]}>Save</button>
+                <button type="button" onClick={handleCancel} className={styles["cancelButton"]}>Cancel</button>
+            </div>
+        </form>
+    );
+}

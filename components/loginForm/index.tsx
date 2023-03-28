@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@/repository/firebase';
 import { useRouter } from 'next/router';
+import Snackbar from '../snackbar';
+import { useState } from 'react';
 
 
 const schema = Yup.object({
@@ -37,6 +39,7 @@ const LoginForm = () => {
         error,
     ] = useSignInWithEmailAndPassword(auth);
 
+    const [showSnackbar, setShowSnackbar] = useState(false)
 
     const onSubmit = async (data: any) => {
         const { email, password } = data
@@ -44,6 +47,8 @@ const LoginForm = () => {
             const res = await signInWithEmailAndPassword(email, password)
             if (res) {
                 router.push("/dashboard")
+            } else if (error) {
+                setShowSnackbar(true)
             }
 
 
@@ -83,7 +88,7 @@ const LoginForm = () => {
                     <div className={styles["loginButtonContainer"]}>
                         <button className={styles["loginButton"]} type='submit'>
                             {loading ?
-                                "Loging In..." : "Log In"
+                                "Logging In..." : "Log In"
                             }
                         </button>
                     </div>
@@ -96,7 +101,9 @@ const LoginForm = () => {
             <div className={styles["createNewAccount"]}>
                 <Link href={"createNewAccount"} className={styles["createNewAccountLink"]}>Create New Account</Link>
             </div>
-
+            {
+                showSnackbar ? <Snackbar message={`Error :- ${error}`} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
+            }
         </div>)
 }
 

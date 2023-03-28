@@ -8,6 +8,7 @@ import styles from './savedGames.module.scss'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/repository/firebase';
 import { Game } from '@/types/game';
+import Snackbar from '../snackbar';
 
 const SavedGames = () => {
 
@@ -15,9 +16,11 @@ const SavedGames = () => {
     const userId = user?.uid as string
     const [recentGames, setRecentGames] = useState<Game[] | undefined>(undefined);
     const [reloadRecent, setReloadRecent] = useState<Boolean>(false);
+    const [showSnackbar, setShowSnackbar] = useState(false)
 
     const handleRemoveGame = async (recentGameId: string) => {
         await removeGame(recentGameId);
+        setShowSnackbar(true)
         setReloadRecent(!reloadRecent);
     }
 
@@ -65,7 +68,9 @@ const SavedGames = () => {
                     })
                 }
             </div>
-
+            {
+                showSnackbar ? <Snackbar message={"Game deleted successfully"} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
+            }
         </div>
 
     )
