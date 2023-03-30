@@ -11,7 +11,7 @@ import {
 } from "@/repository/firebase";
 import { NewGame } from "@/types/game";
 import { Status } from "@/types/status";
-import { updatePlayerGames } from "../players";
+// import { updatePlayerGames } from "../players";
 import { ulid } from "ulidx";
 import { Player } from "@/types/player";
 
@@ -29,7 +29,7 @@ export const addNewGame = async (newGame: NewGame): Promise<string> => {
 
   await addGameToStore(gameData.id, gameData);
   await addPlayerToGameInStore(gameData.id, player);
-  updatePlayerGames(gameData.id, player.id);
+  // updatePlayerGames(gameData.id, player.id);
   await updateUserGamesInStore(newGame.createdById, gameData.id);
   return gameData.id;
 };

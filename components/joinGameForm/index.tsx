@@ -3,7 +3,8 @@ import styles from './joinGameForm.module.scss'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getGame } from '@/service/games';
-import { addPlayerToGame, isCurrentPlayerInGame } from '@/service/players';
+import { addPlayerToGame } from '@/service/players';
+import { ulid } from 'ulidx';
 
 
 const JoinGameForm = () => {
@@ -12,42 +13,19 @@ const JoinGameForm = () => {
 
     const [joinGameId, setJoinGameId] = useState(gid as string);
     const [playerName, setPlayerName] = useState('');
-    const [gameFound, setIsGameFound] = useState(true);
-    const [showNotExistMessage, setShowNotExistMessage] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const onSubmit = async (e: any) => {
         e.preventDefault()
-        setLoading(true);
         if (joinGameId) {
-            const res = await addPlayerToGame(joinGameId, playerName);
+            const newPlayer = { name: playerName, id: ulid() };
 
-            setIsGameFound(res);
+            const res = await addPlayerToGame(joinGameId, newPlayer);
+
             if (res) {
-                router.push(`/game/${joinGameId}`);
+                router.push(`/game/${joinGameId}?id=${newPlayer.id}`);
             }
-            setLoading(false);
         }
     };
-
-    useEffect(() => {
-        async function fetchData() {
-            if (joinGameId) {
-                if (await getGame(joinGameId)) {
-                    setIsGameFound(true);
-                    if (await isCurrentPlayerInGame(joinGameId)) {
-                        router.push(`/game/${joinGameId}`);
-                    }
-                } else {
-                    setShowNotExistMessage(true);
-                    setTimeout(() => {
-                        router.push('/');
-                    }, 5000)
-                }
-            }
-        }
-        fetchData();
-    }, [joinGameId, history]);
 
     return (
         <form className={styles["container"]}

@@ -1,6 +1,5 @@
-import { db } from '@/repository/firebase'
+import { auth, db } from '@/repository/firebase'
 import { streamGame } from '@/service/games'
-import { getCurrentPlayerId } from '@/service/players'
 import { Game } from '@/types/game'
 import { Player } from '@/types/player'
 import { doc, onSnapshot } from 'firebase/firestore'
@@ -16,13 +15,17 @@ import Story from '../story'
 import { IStory } from '@/types/story'
 import Image from 'next/image'
 import { isModerator } from '@/utils/isModerator'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 interface IGameProps {
     gid: string
 }
 
 const Game = ({ gid }: IGameProps) => {
+
     const router = useRouter()
+    const [user] = useAuthState(auth)
+    const { id } = router.query
 
     const [game, setGame] = useState<Game | undefined>(undefined);
     const [players, setPlayers] = useState<Player[] | undefined>(undefined);
@@ -35,10 +38,7 @@ const Game = ({ gid }: IGameProps) => {
         let effectCleanup = true;
 
         if (effectCleanup) {
-            const currentPlayerId = getCurrentPlayerId(gid as string);
-            if (!currentPlayerId) {
-                router.push(`/join/${gid}`);
-            }
+            const currentPlayerId = user ? user.uid : id as string;
             setCurrentPlayerId(currentPlayerId);
             setIsLoading(true);
         }
@@ -54,7 +54,6 @@ const Game = ({ gid }: IGameProps) => {
                         return;
                     }
                 }
-                setIsLoading(false);
             }
         })
         const streamPlayersFromStore = (id: string) => {
@@ -70,7 +69,6 @@ const Game = ({ gid }: IGameProps) => {
             snapshot.forEach((doc) => {
                 players.push(doc.data() as Player);
             });
-            const currentPlayerId = getCurrentPlayerId(gid as string);
             if (!players.find((player) => player.id === currentPlayerId)) {
                 router.push(`/join/${gid}`);
             }
@@ -101,7 +99,7 @@ const Game = ({ gid }: IGameProps) => {
             storyUnsubscribe()
             effectCleanup = false
         };
-    }, [gid, router]);
+    }, [gid, router, currentPlayerId]);
 
 
 
@@ -195,7 +193,8 @@ const Game = ({ gid }: IGameProps) => {
                 </div>
             </div>
             :
-            <div>Game not found</div>
+            game ? <div>Link not valid</div> :
+                <div>Game not found</div>
         }
         </>
     )
