@@ -25,7 +25,6 @@ export const removeStory = async (gameId: string, storyId: string) => {
 };
 
 export const finishStory = async (gameId: string, story: IStory) => {
-    const game = await getGameFromStore(gameId);
     const values = Object.values(story.values) as number[];
     const updatedStory = {
         ...story,

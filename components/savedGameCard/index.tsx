@@ -4,8 +4,9 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import DeleteModal from "../deleteModal"
 import { isModerator } from '@/utils/isModerator'
-import { getCurrentPlayerId } from '@/service/players'
 import { Game } from '@/types/game'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/repository/firebase'
 
 interface ISavedGameCardProps {
     recentGame: Game,
@@ -13,6 +14,8 @@ interface ISavedGameCardProps {
 }
 
 const SavedGameCard = ({ recentGame, handleRemoveGame }: ISavedGameCardProps) => {
+    const [user] = useAuthState(auth)
+    const currentUserId = user?.uid
     const router = useRouter()
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -32,7 +35,7 @@ const SavedGameCard = ({ recentGame, handleRemoveGame }: ISavedGameCardProps) =>
             <div className={styles["detail"]}>
                 {recentGame.id}
             </div>
-            {isModerator(recentGame.createdById, getCurrentPlayerId(recentGame.id)) ?
+            {isModerator(recentGame.createdById, currentUserId) ?
                 <div className={styles["deleteButton"]} onClick={(e) => {
                     e.stopPropagation()
                     setIsDeleteModalOpen(true)

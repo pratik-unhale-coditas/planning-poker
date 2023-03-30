@@ -2,8 +2,10 @@ import { addPlayerToGameInStore, getGameFromStore, getPlayerFromStore, getPlayer
 import { getPlayerGamesFromCache, updatePlayerGamesInCache } from "@/repository/localStorage";
 import { Game } from "@/types/game";
 import { Player, PlayerGame } from "@/types/player";
+import { Status } from "@/types/status";
 import { IStory } from "@/types/story";
 import { ulid } from "ulidx";
+import { finishStory } from "../story";
 
 
 export const addPlayer = async (gameId: string, player: Player) => {
@@ -18,7 +20,9 @@ export const removePlayer = async (gameId: string, playerId: string, newStory: I
     if (game) {
         removePlayerFromGameInStore(gameId, playerId);
         updateStoryInStore(gameId, newStory)
-
+        if (newStory.status === Status.Finished) {
+            finishStory(gameId, newStory)
+        }
     }
 };
 
