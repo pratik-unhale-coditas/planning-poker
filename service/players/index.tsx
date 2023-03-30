@@ -2,6 +2,7 @@ import { addPlayerToGameInStore, getGameFromStore, getPlayerFromStore, getPlayer
 import { getPlayerGamesFromCache, updatePlayerGamesInCache } from "@/repository/localStorage";
 import { Game } from "@/types/game";
 import { Player, PlayerGame } from "@/types/player";
+import { IStory } from "@/types/story";
 import { ulid } from "ulidx";
 
 
@@ -12,10 +13,12 @@ export const addPlayer = async (gameId: string, player: Player) => {
     }
 };
 
-export const removePlayer = async (gameId: string, playerId: string) => {
+export const removePlayer = async (gameId: string, playerId: string, newStory: IStory) => {
     const game = await getGameFromStore(gameId);
     if (game) {
         removePlayerFromGameInStore(gameId, playerId);
+        updateStoryInStore(gameId, newStory)
+
     }
 };
 
@@ -106,21 +109,8 @@ export const addPlayerToGame = async (gameId: string, playerName: string): Promi
     return true;
 };
 
-// export const resetPlayers = async (gameId: string) => {
-//     const players = await getPlayersFromStore(gameId);
-
-//     players.forEach(async (player) => {
-//         const updatedPlayer: Player = {
-//             ...player,
-//             status: Status.NotStarted,
-//             value: 0,
-//         };
-//         await updatePlayerInStore(gameId, updatedPlayer);
-//     });
-// };
 
 export const getPlayerRecentGamesFromStore = async (userId: string) => {
-    // let playerGames: PlayerGame[] = getPlayerGamesFromCache();
     let games: Game[] = [];
 
     let player = await getUserFromStore(userId);
@@ -133,7 +123,6 @@ export const getPlayerRecentGamesFromStore = async (userId: string) => {
                 const game = await getGameFromStore(playerGame);
 
                 if (game) {
-                    // const player = await getPlayerFromStore(game.id, playerGame.playerId);
                     games.push(game);
                 }
             })

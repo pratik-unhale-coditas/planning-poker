@@ -170,8 +170,6 @@ const Game = ({ gid }: IGameProps) => {
                                     alt='emptyStateImage'
                                     width={250}
                                     height={250} />
-                                {/* <img src="../../public/icons/emptyState.png" alt="" /> */}
-                                {/* <img src="./icons/emptyState.png" alt="" /> */}
                             </div>
                             <p>Oops! No story found</p>
                             {

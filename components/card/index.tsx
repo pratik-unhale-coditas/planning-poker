@@ -5,7 +5,7 @@ import styles from './card.module.scss'
 import { ICardProps } from './card.types';
 
 
-const Card = ({ card, handleCardSelect, isSelected }: ICardProps) => {
+const Card: React.FC<ICardProps> = ({ card, handleCardSelect, isSelected }) => {
 
 
     const [selected, setSelected] = useState<boolean | null>(null)

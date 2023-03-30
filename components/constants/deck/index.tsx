@@ -1,11 +1,3 @@
-
-
-export const Decks = [
-    { deckName: "fibonacci", cards: ["0", "1", "2", "3", "5", "8", "13", "21", "34", "55", "89", "?", "Pass"] },
-    { deckName: "tshirts", cards: ["xxs", "xs", "s", "m", "l", "xl", "xxl", "?", "Pass"] },
-    { deckName: "powersOfTwo", cards: ["0", "1", "2", "4", "8", "16", "32", "64", "?", "Pass"] }
-]
-
 import { GameType } from '../../../types/game';
 
 export interface CardConfig {
@@ -13,6 +5,7 @@ export interface CardConfig {
     displayValue: string;
     color: string;
 }
+
 export const fibonacciCards: CardConfig[] = [
     { value: 0, displayValue: '0', color: '#e7edf3' },
     { value: 1, displayValue: '1', color: '#9EC8FE' },

@@ -1,11 +1,8 @@
 import styles from "./customRadioList.module.scss"
 
-interface CheckboxProps {
-    options: { label: string, value: string }[];
-    selectedOption: string;
-    onChange: (selectedOption: string) => void;
-    title: string
-}
+import { CheckboxProps } from "./customRadioList.types";
+
+
 
 const CustomRadioList: React.FC<CheckboxProps> = ({ options, selectedOption, onChange, title }) => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

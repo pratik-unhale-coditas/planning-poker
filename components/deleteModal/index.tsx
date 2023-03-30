@@ -1,13 +1,11 @@
 import Modal from "../modal"
+
 import style from './deleteModal.module.scss'
 
-interface IDeleteModalProps {
-    closeModalCallBack: (value: boolean) => void,
-    title: string,
-    handleDeleteCallback: () => void
-}
+import { IDeleteModalProps } from "./deleteModal.types"
 
-const DeleteModal = ({ closeModalCallBack, title, handleDeleteCallback }: IDeleteModalProps) => {
+
+const DeleteModal: React.FC<IDeleteModalProps> = ({ closeModalCallBack, title, handleDeleteCallback }) => {
     const handleDelete = () => {
         handleDeleteCallback()
         closeModalCallBack(false)

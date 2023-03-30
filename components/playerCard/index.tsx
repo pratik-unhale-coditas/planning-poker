@@ -1,47 +1,53 @@
+import { auth } from "@/repository/firebase";
 import { removePlayer } from "@/service/players";
 import { Game, GameType } from "@/types/game";
 import { Player } from "@/types/player";
 import { Status } from "@/types/status";
 import { IStory } from "@/types/story";
 import { isModerator } from "@/utils/isModerator";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { getCards } from "../constants/deck";
 import styles from "./playerCard.module.scss"
 
 interface IPlayerCardProps {
     game: Game;
     player: Player;
-    currentPlayerId: string;
+    // currentPlayerId: string;
     currentStory: IStory
 }
 
 
 
-const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentPlayerId, currentStory }) => {
+const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentStory }) => {
+    const [user] = useAuthState(auth)
+    const currentPlayerId = user?.uid
+
     const removeUser = (gameId: string, playerId: string) => {
-        removePlayer(gameId, playerId);
+        const newStory = currentStory
+        delete newStory.values[playerId]
+        removePlayer(gameId, playerId, newStory);
     };
 
-    return (<div
-        className={[true ? styles["flipped"] : null, styles["card"]].join(" ")}
+    return (< div
+        className={styles["card"]}
     >
-        <div className={styles["front"]}>
+
+        <div className={styles["title"]}>
             {player.name}
         </div>
-        <div className={styles["back"]}>
-            <div className={styles["title"]}>
-                {player.name}
-            </div>
-            <div className={styles["value"]}>
-                {getCardValue(player.id, currentStory, game)}
-            </div>
+        <div className={styles["value"]}>
+            {getCardValue(player.id, currentStory, game)}
         </div>
         {
             isModerator(game.createdById, currentPlayerId) &&
             player.id != currentPlayerId &&
-            <div className={styles["deleteButton"]}>Delete</div>
+            <div
+                className={styles["deleteButton"]}
+                onClick={() => removeUser(game.id, player.id)}
+            ><img src="/icons/trash.svg" /></div>
         }
-
-    </div>)
+    </div>
+    )
 }
 
 export default PlayerCard

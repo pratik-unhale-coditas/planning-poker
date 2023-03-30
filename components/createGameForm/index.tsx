@@ -1,12 +1,17 @@
-import { auth, db } from '@/repository/firebase';
-import { addNewGame } from '@/service/games';
-import { GameType, NewGame } from '@/types/game';
-import { doc, getDoc } from 'firebase/firestore';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, db } from '@/repository/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+
+
 import CustomRadioList from '../customRadioList';
+
+import { addNewGame } from '@/service/games';
+
 import styles from './createGameForm.module.scss'
+
+import { GameType, NewGame } from '@/types/game';
 
 const CreateGameForm = () => {
 

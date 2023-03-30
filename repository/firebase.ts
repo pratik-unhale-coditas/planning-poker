@@ -159,6 +159,7 @@ export const removePlayerFromGameInStore = async (
   await deleteDoc(
     doc(db, gamesCollectionName, gameId, playersCollectionName, playerId)
   );
+
   return true;
 };
 

@@ -5,15 +5,11 @@ import Modal from "../modal"
 import { addStoryToGame } from "@/service/story"
 
 import styles from './addStoryModal.module.scss'
-import { Player } from "@/types/player"
 
-interface IAddStoryModal {
-    handleCloseModal: () => void,
-    gameId: string,
-    players: Player[]
-}
+import { IAddStoryModal } from "./addStoryModa.types"
 
-const AddStoryModal = ({ handleCloseModal, gameId, players }: IAddStoryModal) => {
+
+const AddStoryModal: React.FC<IAddStoryModal> = ({ handleCloseModal, gameId, players }) => {
 
     const [storyName, setStoryName] = useState<string>("")
 
