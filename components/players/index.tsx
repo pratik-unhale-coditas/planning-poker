@@ -20,7 +20,6 @@ const Players: React.FC<IPlayersProps> = ({ game, players, currentPlayerId, curr
                         key={player.id}
                         game={game}
                         player={player}
-                        currentPlayerId={currentPlayerId}
                         currentStory={currentStory}
                     />
                 )

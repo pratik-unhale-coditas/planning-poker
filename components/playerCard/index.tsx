@@ -12,7 +12,6 @@ import styles from "./playerCard.module.scss"
 interface IPlayerCardProps {
     game: Game;
     player: Player;
-    // currentPlayerId: string;
     currentStory: IStory
 }
 
