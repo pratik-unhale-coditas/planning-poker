@@ -73,6 +73,9 @@ export const removePlayer = async (gameId: string, playerId: string, newStory: I
 // };
 
 export const isPlayerInGameStore = async (gameId: string, playerId: string) => {
+    if (!playerId) {
+        return false
+    }
     const player = await getPlayerFromStore(gameId, playerId);
     return player ? true : false;
 };
