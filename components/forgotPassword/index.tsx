@@ -7,6 +7,7 @@ import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { auth } from '@/repository/firebase';
 import { useState } from 'react';
 import Link from 'next/link';
+import Snackbar from '../snackbar';
 
 
 const schema = Yup.object({
@@ -22,6 +23,8 @@ const ForgotPassword = () => {
     const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
         auth
     );
+    const [showSnackbar, setShowSnackbar] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState<any>("")
 
     const { handleSubmit, formState: { errors }, setValue } = useForm({
         defaultValues: {
@@ -36,7 +39,10 @@ const ForgotPassword = () => {
             const res = await sendPasswordResetEmail(
                 email,
             );
-
+            if (error) {
+                setSnackbarMessage(error.toString())
+                setShowSnackbar(true)
+            }
             if (res) {
                 setIsPasswordResetSuccessfull(true)
             }
@@ -63,31 +69,37 @@ const ForgotPassword = () => {
                 <Link href={'/'} className={styles["loginPageLink"]}>Go back to login page</Link>
             </div> :
 
-            <form
-                className={styles["container"]}
-                onSubmit={handleSubmit(onSubmit)}
-            >
-                <div className={styles["header"]}>
-                    <h2>Reset Your Password</h2>
-                </div>
-                <div className={styles["main"]}>
-                    <div className={styles["description"]}>
-                        <p>Enter the work email you used to sign up, and we will send you a new password</p>
+            <div>
+                <form
+                    className={styles["container"]}
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                    <div className={styles["header"]}>
+                        <h2>Reset Your Password</h2>
                     </div>
-                    <div className={styles["inputContainer"]}>
-                        <label className={styles["label"]}>Work Email</label>
-                        <input name="email" className={styles["input"]} type={"email"} onChange={handleEmailChange} />
+                    <div className={styles["main"]}>
+                        <div className={styles["description"]}>
+                            <p>Enter the work email you used to sign up, and we will send you a new password</p>
+                        </div>
+                        <div className={styles["inputContainer"]}>
+                            <label className={styles["label"]}>Work Email</label>
+                            <input name="email" className={styles["input"]} type={"email"} onChange={handleEmailChange} />
+                        </div>
+                        <p className={styles["inputWarningMessage"]}>{errors.email?.message}</p>
+                        <div className={styles["submitButtonContainer"]}>
+                            <button className={styles["submitButton"]} type="submit">
+                                {sending ? "Sending..." :
+                                    "Send New Password"
+                                }
+                            </button>
+                        </div>
                     </div>
-                    <p className={styles["inputWarningMessage"]}>{errors.email?.message}</p>
-                    <div className={styles["submitButtonContainer"]}>
-                        <button className={styles["submitButton"]} type="submit">
-                            {sending ? "Sending..." :
-                                "Send New Password"
-                            }
-                        </button>
-                    </div>
-                </div>
-            </form>
+                </form>
+                {
+                    showSnackbar ? <Snackbar message={snackbarMessage as string} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
+                }
+            </div>
+
     )
 }
 
