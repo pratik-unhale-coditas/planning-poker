@@ -27,7 +27,6 @@ const Profile = () => {
         }
     }
     const handleUpdateProfile = async (data: any) => {
-        console.log(data)
         const res = await updateUserDataInStore(user?.uid as string, data)
         if (res) {
             setIsEditingPersonalDetails(false)

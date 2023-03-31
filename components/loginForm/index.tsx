@@ -11,6 +11,7 @@ import Snackbar from '../snackbar';
 import { useState } from 'react';
 
 
+
 const schema = Yup.object({
     email: Yup.string()
         .email("Invalid email")
@@ -38,6 +39,9 @@ const LoginForm = () => {
         loading,
         error,
     ] = useSignInWithEmailAndPassword(auth);
+
+    if (user) {
+    }
 
     const [showSnackbar, setShowSnackbar] = useState(false)
 

@@ -23,12 +23,14 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentS
     const { protocol, host } = location;
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [showSnackbar, setShowSnackbar] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState("")
 
     const completeUrl = `${protocol}//${host}/join/${gid}`;
 
     const copyInviteLink = async () => {
         try {
             await navigator.clipboard.writeText(completeUrl);
+            setSnackbarMessage(`Link Copied ${protocol}//${host}/join/${gid}`)
             setShowSnackbar(true);
         } catch (error) {
             console.error('Failed to copy: ', error);
@@ -44,7 +46,8 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentS
 
     const handleFinishGame = () => {
         if (Object.values(currentStory.values).includes(null)) {
-            console.log("not finished")
+            setSnackbarMessage("Let all players finish")
+            setShowSnackbar(true);
         } else {
             finishStory(game.id, currentStory)
         }
@@ -129,7 +132,7 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentS
                 null
         }
         {
-            showSnackbar ? <Snackbar message={`Link Copied ${protocol}//${host}/join/${gid}`} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
+            showSnackbar ? <Snackbar message={snackbarMessage} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
         }
     </div>)
 }

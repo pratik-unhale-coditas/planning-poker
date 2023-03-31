@@ -17,6 +17,7 @@ const SavedGames = () => {
     const [recentGames, setRecentGames] = useState<Game[] | undefined>(undefined);
     const [reloadRecent, setReloadRecent] = useState<Boolean>(false);
     const [showSnackbar, setShowSnackbar] = useState(false)
+    const [query, setQuery] = useState("");
 
     const handleRemoveGame = async (recentGameId: string) => {
         await removeGame(recentGameId);
@@ -48,16 +49,30 @@ const SavedGames = () => {
         }
         return false;
     };
-
-
+    const handleQueryChange = (event: any) => {
+        setQuery(event.target.value);
+    };
+    const filteredGames = recentGames?.filter((game) =>
+        game.name.toLowerCase().includes(query.toLowerCase())
+    );
     return (
         <div className={styles["container"]}>
             <h2 className={styles["title"]}>Saved Games</h2>
             {isEmptyRecentGames() ? <Link href={'/dashboard/createNewGame'} className={styles["createNewGame"]}>Create New Game</Link>
-                : null}
+                :
+                <form className={styles["searchFormContainer"]}>
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={handleQueryChange}
+                        className={styles["searchInput"]}
+                        placeholder="Search by name"
+                    />
+                </form>
+            }
             <div className={styles["savedGamesContainer"]}>
                 {
-                    recentGames?.map((recentGame) => {
+                    filteredGames?.map((recentGame) => {
                         return (
                             <SavedGameCard
                                 key={recentGame.id}

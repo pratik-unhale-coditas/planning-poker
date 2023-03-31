@@ -25,10 +25,10 @@ export const removeStory = async (gameId: string, storyId: string) => {
 };
 
 export const finishStory = async (gameId: string, story: IStory) => {
-    const values = Object.values(story.values) as number[];
+    const filteredValues = Object.values(story.values).filter((n) => n !== -1 && n !== -2) as number[]
     const updatedStory = {
         ...story,
-        average: Math.round(values.reduce((a, c) => a + c) / values.length),
+        average: Math.round(filteredValues.reduce((a, c) => a + c) / filteredValues.length),
         status: Status.Finished
     }
     updateStoryInStore(gameId, updatedStory)

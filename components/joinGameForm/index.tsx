@@ -11,6 +11,7 @@ import { auth, getUserFromStore, updateUserGamesInStore } from '@/repository/fir
 
 const JoinGameForm = () => {
     const [user] = useAuthState(auth)
+
     const currentPlayerId = user?.uid
     const router = useRouter()
     const { gid } = router.query
@@ -18,6 +19,9 @@ const JoinGameForm = () => {
     const [joinGameId, setJoinGameId] = useState(gid as string);
     const [playerName, setPlayerName] = useState('');
 
+    const navigateToHome = () => {
+        router.push('/')
+    }
     const onSubmit = async (e: any) => {
         e.preventDefault()
         if (joinGameId) {
@@ -63,7 +67,9 @@ const JoinGameForm = () => {
         >
             <div className={styles["header"]}>
                 <h2>Join A Game</h2>
-                <button><img src="./icons/x.svg" alt="" /> Close</button>
+                <button
+                    onClick={navigateToHome}
+                ><img src="./icons/x.svg" alt="" /> Close</button>
             </div>
             <div className={styles["main"]}>
                 <div className={styles["inputContainer"]}>
@@ -71,7 +77,7 @@ const JoinGameForm = () => {
                     <input name="name" className={styles["input"]} type={"text"} onChange={(e) => setPlayerName(e.target.value)} />
                 </div>
                 <div className={styles["submitButtonContainer"]}>
-                    <button className={styles["submitButton"]}>Join</button>
+                    <button className={styles["submitButton"]} type={"submit"}>Join</button>
                 </div>
             </div>
         </form>
@@ -80,11 +86,14 @@ const JoinGameForm = () => {
             onSubmit={joinPlayer}>
             <div className={styles["header"]}>
                 <h2>Join A Game</h2>
-                <button><img src="./icons/x.svg" alt="" /> Close</button>
+                <button
+
+                    onClick={navigateToHome}>
+                    <img src="./icons/x.svg" alt="" /> Close</button>
             </div>
             <div className={styles["main"]}>
                 <div className={styles["submitButtonContainer"]}>
-                    <button className={styles["submitButton"]}>Join</button>
+                    <button className={styles["submitButton"]} type={"submit"}>Join</button>
                 </div>
             </div>
         </form>

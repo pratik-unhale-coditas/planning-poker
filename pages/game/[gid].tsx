@@ -13,9 +13,7 @@ const GamePage = ({ gid }: GamePageProps) => {
 export default GamePage;
 
 export const getServerSideProps: GetServerSideProps<GamePageProps> = async (context) => {
-    //   const { gid } = context.query;
     const gid = context.query.gid?.toString() as string;
-    // Use the gid parameter here...
 
     return {
         props: {
