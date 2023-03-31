@@ -60,11 +60,11 @@ const ForgotPassword = () => {
                 { /*eslint-disable-next-line react/no-unescaped-entities */}
                 <p>If you don't see the email in your inbox, be sure to check your spam or junk folder.</p>
                 <p>Thank you for using our website!</p>
-                {/* <div className={styles["loginPageLink"]}> */}
                 <Link href={'/'} className={styles["loginPageLink"]}>Go back to login page</Link>
-                {/* </div> */}
             </div> :
-            <form className={styles["container"]}
+
+            <form
+                className={styles["container"]}
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <div className={styles["header"]}>
@@ -80,11 +80,14 @@ const ForgotPassword = () => {
                     </div>
                     <p className={styles["inputWarningMessage"]}>{errors.email?.message}</p>
                     <div className={styles["submitButtonContainer"]}>
-                        <button className={styles["submitButton"]}>Send New Password</button>
+                        <button className={styles["submitButton"]} type="submit">
+                            {sending ? "Sending..." :
+                                "Send New Password"
+                            }
+                        </button>
                     </div>
                 </div>
             </form>
-
     )
 }
 
