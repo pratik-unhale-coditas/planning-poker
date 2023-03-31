@@ -45,12 +45,13 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentS
 
 
     const handleFinishGame = () => {
-        if (Object.values(currentStory.values).includes(null)) {
-            setSnackbarMessage("Let all players finish")
-            setShowSnackbar(true);
-        } else {
-            finishStory(game.id, currentStory)
+        const obj = currentStory.values
+        for (const key in obj) {
+            if (obj[key] === null) {
+                obj[key] = -1;
+            }
         }
+        finishStory(game.id, currentStory)
     }
 
     const handleRemoveStory = async (gameId: string, storyId: string) => {
