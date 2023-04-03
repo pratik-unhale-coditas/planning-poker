@@ -59,7 +59,7 @@ const getCardValue = (playerId: string, story: IStory, game: Game) => {
     if (story.status === Status.Finished) {
         if (story.values[playerId] !== null) {
             if (story.values[playerId] === -1) {
-                return '☕'; // coffee emoji
+                return 'Pass'; // coffee emoji
             }
             return getCardDisplayValue(game.gameType, story.values[playerId]);
         }
