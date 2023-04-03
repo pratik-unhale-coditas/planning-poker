@@ -149,7 +149,6 @@ const Game = ({ gid }: IGameProps) => {
                                     <Table
                                         game={game}
                                         currentPlayerId={currentPlayerId}
-                                        players={players}
                                         currentStory={currentStory} />
                                 </div>
                             </div>

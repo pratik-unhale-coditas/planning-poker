@@ -66,7 +66,7 @@ const JoinGameForm = () => {
             onSubmit={onSubmit}
         >
             <div className={styles["header"]}>
-                <h2>Join A Game</h2>
+                <h2>Join Game</h2>
                 <button
                     onClick={navigateToHome}
                 ><img src="./icons/x.svg" alt="" /> Close</button>
@@ -85,7 +85,7 @@ const JoinGameForm = () => {
             className={styles["container"]}
             onSubmit={joinPlayer}>
             <div className={styles["header"]}>
-                <h2>Join A Game</h2>
+                <h2>Join Game</h2>
                 <button
 
                     onClick={navigateToHome}>

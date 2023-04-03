@@ -18,6 +18,14 @@
     padding-bottom: 0.25rem;
   }
 
+  .instructionContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(189, 189, 189);
+    font-size: 0.75rem;
+  }
+
   .utilityContainer {
     display: flex;
     justify-content: center;

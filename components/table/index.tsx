@@ -1,22 +1,21 @@
 import { finishStory, removeStory, resetStory } from '@/service/story';
 import { Game } from '@/types/game';
-import { Player } from '@/types/player';
 import { IStory } from '@/types/story';
 import { isModerator } from '@/utils/isModerator';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import DeleteModal from '../deleteModal';
 import Snackbar from '../snackbar';
 import styles from './table.module.scss'
+import { Status } from '@/types/status';
 
 interface ITableProps {
     game: Game;
     currentPlayerId: string;
-    players: Player[],
     currentStory: IStory
 }
 
-const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentStory }) => {
+const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) => {
     const router = useRouter()
 
     const { gid } = router.query
@@ -41,8 +40,6 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentS
     const toggleDeleteModal = (value: boolean) => {
         setIsDeleteModalOpen(value)
     }
-
-
 
     const handleFinishGame = () => {
         const obj = currentStory.values
@@ -119,7 +116,26 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, players, currentS
                     Exit</div>
             </div>
         }
+        <div className={styles["instructionContainer"]}>
+            {
 
+                !isModerator(game.createdById, currentPlayerId) ?
+                    currentStory.status !== Status.Finished ?
+                        (
+                            currentStory.values[currentPlayerId] === null ?
+                                <p>
+                                    Click on a card to vote
+                                </p>
+                                :
+                                <p>
+                                    Wait for the moderator to finish the game
+                                </p>
+                        )
+                        :
+                        <p>Game completed</p>
+                    : null
+            }
+        </div>
         {
             isDeleteModalOpen ?
                 <DeleteModal
