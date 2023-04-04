@@ -1,14 +1,15 @@
-import styles from './forgotPassword.module.scss'
-
-import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from "yup";
-import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
-import { auth } from '@/repository/firebase';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
+
+import { auth } from '@/repository/firebase';
+
 import Snackbar from '../snackbar';
 
+import styles from './forgotPassword.module.scss'
 
 const schema = Yup.object({
     email: Yup.string()

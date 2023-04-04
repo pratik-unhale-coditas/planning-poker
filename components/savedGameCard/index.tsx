@@ -1,17 +1,14 @@
-import styles from './savedGameCard.module.scss'
-import { useRouter } from "next/router"
-
 import { useState } from "react"
-import DeleteModal from "../deleteModal"
-import { isModerator } from '@/utils/isModerator'
-import { Game } from '@/types/game'
+import { useRouter } from "next/router"
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '@/repository/firebase'
 
-interface ISavedGameCardProps {
-    recentGame: Game,
-    handleRemoveGame: () => void
-}
+import DeleteModal from "../deleteModal"
+import { auth } from '@/repository/firebase'
+import { isModerator } from '@/utils/isModerator'
+
+import styles from './savedGameCard.module.scss'
+
+import { ISavedGameCardProps } from './savedGameCard.types'
 
 const SavedGameCard = ({ recentGame, handleRemoveGame }: ISavedGameCardProps) => {
     const [user] = useAuthState(auth)

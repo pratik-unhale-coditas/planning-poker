@@ -1,15 +1,17 @@
-import Sidebar from '@/components/sidebar'
-import { auth } from '@/repository/firebase'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { PropsWithChildren, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
+
+import { auth } from '@/repository/firebase'
+
+import Sidebar from '@/components/sidebar'
+
 import styles from './dashboardLayout.module.scss'
 
-interface DashboardLayoutProps extends PropsWithChildren {
+import { IDashboardLayoutProps } from './dashboardLayout.types'
 
-}
+const DashboardLayout: React.FC<IDashboardLayoutProps> = ({ children }) => {
 
-const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     const [user] = useAuthState(auth)
     const router = useRouter()
     const navigateTo = () => {

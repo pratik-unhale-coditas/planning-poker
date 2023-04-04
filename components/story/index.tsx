@@ -1,26 +1,20 @@
-import { removeStory } from '@/service/story'
-import { IStory } from '@/types/story'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import AddStoryModal from '../addStoryModal'
-import styles from './story.module.scss'
+
 import DeleteModal from "../deleteModal"
-import { Game } from '@/types/game'
+import AddStoryModal from '../addStoryModal'
+
+import { removeStory } from '@/service/story'
 import { isModerator } from '@/utils/isModerator'
-import { Player } from '@/types/player'
 
-interface IStoryProps {
-    stories: IStory[] | undefined,
-    game: Game,
-    selectedStory: IStory | undefined,
-    handleStorySelect: any,
-    currentPlayerId: string,
-    players: Player[]
-}
+import styles from './story.module.scss'
 
-const Story = ({ stories, game, selectedStory, handleStorySelect,
+import { IStoryProps } from './story.types'
+
+
+const Story: React.FC<IStoryProps> = ({ stories, game, selectedStory, handleStorySelect,
     currentPlayerId,
-    players }: IStoryProps) => {
+    players }) => {
     const [isAddStoryModalOpen, setIsAddStoryModalOpen] = useState(false)
     const [isDeleteStoryModalOpen, setIsDeleteStoryModalOpen] = useState(false)
 
@@ -44,12 +38,6 @@ const Story = ({ stories, game, selectedStory, handleStorySelect,
                         >
                             <div className={styles["storyName"]}>{story.name}</div>
                             <div className={styles["storyAverage"]}>{story.average}</div>
-                            {/* <div
-                                className={styles["deleteStory"]}
-                                onClick={() => setIsDeleteStoryModalOpen(!isDeleteStoryModalOpen)}
-                            >
-                                <img src="./icons/trash.svg" />
-                            </div> */}
                         </div>
                     )
                 })
@@ -73,7 +61,6 @@ const Story = ({ stories, game, selectedStory, handleStorySelect,
             isAddStoryModalOpen ? <AddStoryModal
                 gameId={game.id}
                 handleCloseModal={() => setIsAddStoryModalOpen(false)}
-                // currentPlayerId={currentPlayerId}
                 players={players}
             ></AddStoryModal> : null
         }

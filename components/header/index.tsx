@@ -1,11 +1,11 @@
-import { auth } from '@/repository/firebase'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/repository/firebase'
+
 import UserMenu from '../userMenu'
+
 import styles from './header.module.scss'
-
-
 
 const Header = () => {
     const [user] = useAuthState(auth)

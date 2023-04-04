@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '@/repository/firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
+import { auth, db } from '@/repository/firebase';
 
 import CustomRadioList from '../customRadioList';
 
@@ -25,7 +25,6 @@ const CreateGameForm = () => {
         if (docSnap.exists()) {
             setCurrentPlayer(docSnap.data())
         } else {
-            // doc.data() will be undefined in this case
             console.log("No such document!");
         }
     }

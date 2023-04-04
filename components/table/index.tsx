@@ -1,19 +1,17 @@
-import { finishStory, removeStory, resetStory } from '@/service/story';
-import { Game } from '@/types/game';
-import { IStory } from '@/types/story';
-import { isModerator } from '@/utils/isModerator';
-import { useRouter } from 'next/router';
 import { useState } from 'react'
+import { useRouter } from 'next/router';
+
 import DeleteModal from '../deleteModal';
 import Snackbar from '../snackbar';
-import styles from './table.module.scss'
-import { Status } from '@/types/status';
 
-interface ITableProps {
-    game: Game;
-    currentPlayerId: string;
-    currentStory: IStory
-}
+import { finishStory, removeStory, resetStory } from '@/service/story';
+import { isModerator } from '@/utils/isModerator';
+
+import styles from './table.module.scss'
+
+import { Status } from '@/types/status';
+import { ITableProps } from './table.types';
+
 
 const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) => {
     const router = useRouter()
@@ -123,16 +121,28 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
                     currentStory.status !== Status.Finished ?
                         (
                             currentStory.values[currentPlayerId] === null ?
-                                <p>
-                                    Click on a card to vote
-                                </p>
+                                <div className={styles["instruction"]}>
+                                    <p>
+                                        Choose a card that best represents your estimate for this story.
+                                    </p>
+                                    <p>
+                                        Your vote will help the team reach a consensus on the estimated effort for this story!
+                                    </p>
+                                </div>
+
                                 :
-                                <p>
-                                    Wait for the moderator to finish the game
-                                </p>
+                                <div className={styles["instruction"]}>
+                                    <p>
+                                        Please wait for the moderator to complete the game.
+                                    </p>
+                                    <p>(P.S.:  Once the voting is finished, your vote is final – so choose wisely!)</p>
+                                </div>
                         )
                         :
-                        <p>Game completed</p>
+                        <div className={styles["instruction"]}>
+                            <p>The moderator has closed voting for this story.</p>
+                            <p>(P.S.: The final estimate has been submitted, so your vote is now final and cant be changed.)</p>
+                        </div>
                     : null
             }
         </div>

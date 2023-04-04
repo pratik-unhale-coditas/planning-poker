@@ -1,16 +1,19 @@
-import { auth, getUserFromStore, updateUserDataInStore } from "@/repository/firebase"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { useEffect, useState } from "react"
 import { useAuthState, useUpdatePassword } from "react-firebase-hooks/auth"
 import { useForm } from "react-hook-form"
-import styles from "./profile.module.scss"
 import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup"
+
+import { auth, getUserFromStore, updateUserDataInStore } from "@/repository/firebase"
+
 import Snackbar from "../snackbar"
+
+import styles from "./profile.module.scss"
 
 
 const Profile = () => {
-    const [updatePassword, updating, error] = useUpdatePassword(auth);
 
+    const [updatePassword, updating, error] = useUpdatePassword(auth);
 
     const [user] = useAuthState(auth)
 
@@ -111,7 +114,6 @@ const Profile = () => {
 export default Profile
 //////////////////////////////////////////////////////////////////////////
 type IProfileDetailsFormValues = {
-    // email: string;
     firstName: string;
     lastName: string;
 };
@@ -125,7 +127,6 @@ interface IProfileDetailsFormProps {
     isEditing: boolean
 }
 const IProfileDetailsSchema = Yup.object().shape({
-    // email: Yup.string().email().required(),
     firstName: Yup.string().required(),
     lastName: Yup.string().required(),
 });
@@ -154,12 +155,7 @@ export const ProfileDetailsForm = ({ email, firstName, lastName, onSubmit, onCan
                     disabled
                     className={styles["input"]}
                     value={email}
-                // type={"email"}
-                // {...register('email')}
                 />
-                {/* {errors.email && (
-                    <span className="text-red-500 text-sm">{errors.email.message}</span>
-                )} */}
             </div>
             <div className={styles["nameContainer"]}>
                 <div className={styles["inputContainer"]}>

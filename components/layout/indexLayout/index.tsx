@@ -1,12 +1,11 @@
-import styles from './indexLayout.module.scss'
-import { PropsWithChildren } from 'react'
 import Header from '@/components/header'
 
-interface MainLayoutProps extends PropsWithChildren {
+import styles from './indexLayout.module.scss'
 
-}
+import { IMainLayoutProps } from './indexLayout.types'
 
-function IndexLayout({ children }: MainLayoutProps) {
+const IndexLayout: React.FC<IMainLayoutProps> = ({ children }) => {
+
     return (<div className={styles['mainLayoutContainer']}>
         <div>
             <Header />
@@ -17,8 +16,4 @@ function IndexLayout({ children }: MainLayoutProps) {
     </div>)
 }
 
-
 export default IndexLayout
-
-
-//    /* box-shadow: -4px 7px 4px -3px #bebbb4;

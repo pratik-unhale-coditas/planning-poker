@@ -1,15 +1,16 @@
-import styles from './loginForm.module.scss'
-
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth } from '@/repository/firebase';
-import { useRouter } from 'next/router';
-import Snackbar from '../snackbar';
-import { useState } from 'react';
 
+import Snackbar from '../snackbar';
+
+import { auth } from '@/repository/firebase';
+
+import styles from './loginForm.module.scss'
 
 const schema = Yup.object({
     email: Yup.string()
@@ -18,8 +19,6 @@ const schema = Yup.object({
     password: Yup.string()
         .required("Password Required"),
 });
-
-
 
 const LoginForm = () => {
 
@@ -38,8 +37,6 @@ const LoginForm = () => {
         loading,
         error,
     ] = useSignInWithEmailAndPassword(auth);
-
-
 
     const [showSnackbar, setShowSnackbar] = useState(false)
 

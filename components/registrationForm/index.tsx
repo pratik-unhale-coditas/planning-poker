@@ -1,21 +1,15 @@
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { doc, setDoc } from "firebase/firestore";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+
+import { auth, db } from '@/repository/firebase';
 
 import styles from './registrationForm.module.scss'
-import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from "yup";
-import Link from 'next/link';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth, db } from '@/repository/firebase';
-import { doc, setDoc } from "firebase/firestore";
-import { useRouter } from 'next/router';
-
-interface IRegistrationFormInputs {
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-
-}
+import { IRegistrationFormInputs } from "./registrationForm.types";
 
 const schema = Yup.object({
     firstName: Yup.string().required('First Name Required'),

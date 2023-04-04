@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link'
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+import SavedGameCard from '../savedGameCard';
+import Snackbar from '../snackbar';
+
 
 import { removeGame } from '@/service/games';
 import { getPlayerRecentGamesFromStore } from '@/service/players';
-import SavedGameCard from '../savedGameCard';
-import styles from './savedGames.module.scss'
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/repository/firebase';
+
+
+import styles from './savedGames.module.scss'
 import { Game } from '@/types/game';
-import Snackbar from '../snackbar';
 
 const SavedGames = () => {
 

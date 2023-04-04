@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import {
@@ -8,10 +7,11 @@ import {
   getDocs,
   getFirestore,
   updateDoc,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import { Game } from "../types/game";
 import { Player } from "../types/player";
-import { doc, setDoc } from "firebase/firestore";
 import { IStory } from "@/types/story";
 
 const firebaseConfig = {

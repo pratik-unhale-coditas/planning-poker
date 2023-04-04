@@ -1,27 +1,29 @@
-import { auth, db } from '@/repository/firebase'
-import { streamGame } from '@/service/games'
-import { Game } from '@/types/game'
-import { Player } from '@/types/player'
-import { doc, onSnapshot } from 'firebase/firestore'
-
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import CardPicker from '../cardPicker'
-import Table from '../table'
-import styles from './game.module.scss'
-import { collection } from "firebase/firestore";
-import Players from '../players'
-import Story from '../story'
-import { IStory } from '@/types/story'
+import { doc, onSnapshot, collection } from 'firebase/firestore'
 import Image from 'next/image'
-import { isModerator } from '@/utils/isModerator'
+import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
-interface IGameProps {
-    gid: string
-}
+import CardPicker from '../cardPicker'
+import Table from '../table'
+import Players from '../players'
+import Story from '../story'
 
-const Game = ({ gid }: IGameProps) => {
+import { auth, db } from '@/repository/firebase'
+import { streamGame } from '@/service/games'
+
+import { Game } from '@/types/game'
+import { Player } from '@/types/player'
+import { IStory } from '@/types/story'
+
+import { IGameProps } from './game.types'
+
+import styles from './game.module.scss'
+
+import { isModerator } from '@/utils/isModerator'
+
+
+const Game: React.FC<IGameProps> = ({ gid }) => {
 
     const router = useRouter()
     const [user] = useAuthState(auth)
@@ -141,7 +143,6 @@ const Game = ({ gid }: IGameProps) => {
                             <Players
                                 game={game}
                                 players={players}
-                                currentPlayerId={currentPlayerId}
                                 currentStory={currentStory}
                             />
                             <div className={styles["tableModuleContainer"]}>

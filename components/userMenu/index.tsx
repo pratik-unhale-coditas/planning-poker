@@ -1,16 +1,15 @@
-import { auth, db } from '@/repository/firebase'
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import styles from './userMenu.module.scss'
+import { useRouter } from 'next/router'
 import { doc, getDoc } from "firebase/firestore";
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { signOut } from 'firebase/auth'
 
-interface IUserMenuProps {
-    userId: string
-}
+import { auth, db } from '@/repository/firebase'
 
-const UserMenu = ({ userId }: IUserMenuProps) => {
+import styles from './userMenu.module.scss'
+
+import { IUserMenuProps } from './userMenu.types'
+
+const UserMenu: React.FC<IUserMenuProps> = ({ userId }) => {
 
     const [user, setUser] = useState<any>(null)
     const docRef = doc(db, "users", userId);

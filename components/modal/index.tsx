@@ -2,9 +2,7 @@ import style from './modal.module.scss'
 
 import { IModalProps } from './modal.types';
 
-
-
-const Modal = ({ children, onClose }: IModalProps) => {
+const Modal: React.FC<IModalProps> = ({ children, onClose }) => {
     return (
         <div
             className={style['modal']}

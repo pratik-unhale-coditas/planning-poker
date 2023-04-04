@@ -1,20 +1,16 @@
+import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/repository/firebase";
+
+import { getCards } from "../constants/deck";
 import { removePlayer } from "@/service/players";
+import { isModerator } from "@/utils/isModerator";
+
 import { Game, GameType } from "@/types/game";
-import { Player } from "@/types/player";
 import { Status } from "@/types/status";
 import { IStory } from "@/types/story";
-import { isModerator } from "@/utils/isModerator";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { getCards } from "../constants/deck";
+import { IPlayerCardProps } from "./playerCard.types";
+
 import styles from "./playerCard.module.scss"
-
-interface IPlayerCardProps {
-    game: Game;
-    player: Player;
-    currentStory: IStory
-}
-
 
 
 const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentStory }) => {

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+
 import styles from './snackbar.module.scss'
 
-const Snackbar = ({ message, showSnackbar, hideSnackbar }: any) => {
+import { ISnackbarProps } from './snackbar.types';
+
+const Snackbar: React.FC<ISnackbarProps> = ({ message, showSnackbar, hideSnackbar }) => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {

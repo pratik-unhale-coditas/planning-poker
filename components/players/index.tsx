@@ -1,20 +1,13 @@
-import styles from './players.module.scss'
-import { Game } from "@/types/game";
-import { Player } from "@/types/player";
 import PlayerCard from "../playerCard";
-import { IStory } from '@/types/story';
 
-interface IPlayersProps {
-    game: Game;
-    players: Player[];
-    currentPlayerId: string;
-    currentStory: IStory
-}
+import styles from './players.module.scss'
 
-const Players: React.FC<IPlayersProps> = ({ game, players, currentPlayerId, currentStory }) => {
+import { IPlayersProps } from './players.types';
+
+const Players: React.FC<IPlayersProps> = ({ game, players, currentStory }) => {
     return (<div className={styles["container"]}>
         {
-            players.map((player: Player) => {
+            players.map((player) => {
                 return (
                     <PlayerCard
                         key={player.id}
