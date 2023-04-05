@@ -64,6 +64,7 @@ const JoinGameForm = () => {
             const newPlayer = { name: displayName, id: ulid() };
             const res = await addPlayerToGame(joinGameId, newPlayer);
             if (res) {
+                localStorage.setItem("currentPlayerId", newPlayer.id)
                 router.push(`/game/${joinGameId}?id=${newPlayer.id}`);
             }
         }
@@ -92,10 +93,16 @@ const JoinGameForm = () => {
     }
 
     useEffect(() => {
+        const playerIdInCache = localStorage.getItem("currentPlayerId")
         async function fetchData() {
             if (await doesGameExist() && currentPlayerId) {
                 if (await isPlayerInGameStore(gid as string, currentPlayerId as string)) {
                     router.push(`/game/${joinGameId}`);
+                }
+            }
+            else if (await doesGameExist() && playerIdInCache) {
+                if (await isPlayerInGameStore(gid as string, playerIdInCache as string)) {
+                    router.push(`/game/${joinGameId}?id=${playerIdInCache}`);
                 }
             }
             else if (!(await doesGameExist())) {
@@ -104,6 +111,7 @@ const JoinGameForm = () => {
             }
         }
         fetchData();
+        // isPlayerInCache()
     }, [joinGameId, history, currentPlayerId]);
 
     return (
