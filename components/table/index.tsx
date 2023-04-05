@@ -13,6 +13,7 @@ import { Status } from '@/types/status';
 import { ITableProps } from './table.types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/repository/firebase';
+import Image from 'next/image';
 
 
 const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) => {
@@ -70,7 +71,12 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
             <div className={styles["utilityContainer"]}>
                 <div className={styles['utilityItem']} onClick={handleFinishGame}>
                     <div className={styles["utilityIcon"]}>
-                        <img src="/icons/eye.svg" alt="" />
+                        <Image
+                            src="/icons/eye.svg"
+                            width={24}
+                            height={24}
+                            alt=""
+                        />
                     </div>
                     <p>Reveal</p>
                 </div>
@@ -79,7 +85,12 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
                         () => toggleDeleteModal(true)
                     }>
                     <div className={styles["utilityIcon"]}>
-                        <img src="/icons/trash.svg" alt="" />
+                        <Image
+                            src="/icons/trash.svg"
+                            width={24}
+                            height={24}
+                            alt=""
+                        />
                     </div>
                     <p>Delete</p>
                 </div>
@@ -88,7 +99,12 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
                     )}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="/icons/refresh.svg" alt="" />
+                        <Image
+                            src="/icons/refresh.svg"
+                            width={24}
+                            height={24}
+                            alt=""
+                        />
                     </div>
                     <p>Reset</p>
                 </div>
@@ -96,14 +112,23 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
                     onClick={() => leaveGame()}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="/icons/logOut.svg" alt="" />
+                        <Image
+                            src="/icons/logout.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </div>
                     Exit</div>
                 <div className={styles['utilityItem']}
                     onClick={() => copyInviteLink()}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="/icons/link.svg" alt="" />
+                        <Image
+                            src="/icons/link.svg" alt=""
+                            width={24}
+                            height={24}
+                        />
                     </div>
                     Invite</div>
             </div>
@@ -113,7 +138,12 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
                     onClick={() => leaveGame()}
                 >
                     <div className={styles["utilityIcon"]}>
-                        <img src="/icons/logout.svg" alt="" />
+                        <Image
+                            src="/icons/logout.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </div>
                     Exit</div>
             </div>

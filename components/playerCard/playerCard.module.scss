@@ -26,7 +26,12 @@
   }
 
   .front {
-    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+    color: black;
+    gap: 0.25rem;
+
+    font-size: 3rem;
     transform: rotateY(0deg);
     background: linear-gradient(
         45deg,
@@ -51,6 +56,15 @@
       ),
       #74b3ff;
     background-size: 17px 17px;
+    .frontEmoji {
+      flex-grow: 1;
+    }
+    p {
+      background-color: white;
+      padding: 0.25rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+    }
   }
 
   .back {
