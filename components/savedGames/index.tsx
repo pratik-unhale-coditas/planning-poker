@@ -39,7 +39,7 @@ const SavedGames = () => {
             }
         }
 
-        fetchRecent();
+        userId && fetchRecent();
 
         return () => { fetchCleanup = false };
     }, [reloadRecent]);

@@ -11,7 +11,7 @@ const Sidebar = () => {
         <div className={styles["container"]}>
             <div className={styles["sidebarItem"]}>
                 <Link href={'/dashboard'} className={'/dashboard' === path ? styles["active"] : ""}>
-                    <img src="./icons/save.svg" alt="" />
+                    <img src="/icons/save.svg" alt="" />
                     <div className={styles["sidebarItemTitle"]}>
                         Saved Games
                     </div>
@@ -19,7 +19,7 @@ const Sidebar = () => {
             </div>
             <div className={styles["sidebarItem"]}>
                 <Link href={'/dashboard/createNewGame'} className={'/dashboard/createNewGame' === path ? styles["active"] : ""}>
-                    <img src="./icons/play.svg" alt="" />
+                    <img src="/icons/play.svg" alt="" />
                     <div className={styles["sidebarItemTitle"]}>
                         Create Game
                     </div>
@@ -27,7 +27,7 @@ const Sidebar = () => {
             </div>
             <div className={styles["sidebarItem"]}>
                 <Link href={'/dashboard/account'} className={'/dashboard/account' === path ? styles["active"] : ""}>
-                    <img src="./icons/user.svg" alt="" />
+                    <img src="/icons/user.svg" alt="" />
                     <div className={styles["sidebarItemTitle"]}>
                         Account
                     </div>

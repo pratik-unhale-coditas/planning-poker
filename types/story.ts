@@ -3,7 +3,7 @@ import { Status } from "./status";
 export interface IStory {
   name: string;
   id: string;
-  average: number;
+  average: number | null;
   status: Status;
   values: IStoryValue;
 }

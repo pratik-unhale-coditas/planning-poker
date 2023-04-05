@@ -1,6 +1,5 @@
 import Game from "@/components/game"
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
 
 interface GamePageProps {
     gid: string;

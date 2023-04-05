@@ -11,7 +11,7 @@ export const addStoryToGame = async (gameId: string, storyName: string, players:
         values[player.id] = null
     )
 
-    const newStory = { name: storyName, id: ulid(), average: 0, status: Status.NotStarted, values: values };
+    const newStory = { name: storyName, id: ulid(), average: null, status: Status.NotStarted, values: values };
     if (game) {
         await addStoryToGameInStore(gameId, newStory);
     }
@@ -44,7 +44,7 @@ export const resetStory = async (gameId: string, story: IStory) => {
     if (game) {
         const updatedStory = {
             ...story,
-            average: 0,
+            average: null,
             status: Status.Started,
             values: valuesCopy
         };

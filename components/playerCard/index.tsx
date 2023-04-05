@@ -22,16 +22,31 @@ const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentStory }) 
         delete newStory.values[playerId]
         removePlayer(gameId, playerId, newStory);
     };
-
+    const value = getCardValue(player.id, currentStory, game)
     return (< div
-        className={styles["card"]}
+        className={[currentStory.status === Status.Finished ? styles["flipped"] : null, styles["card"]].join(" ")}
     >
 
-        <div className={styles["title"]}>
-            {player.name}
+        <div className={styles["front"]}>
+            {currentStory.values[player.id] === null ? '🤔' : '👍'}
         </div>
-        <div className={styles["value"]}>
-            {getCardValue(player.id, currentStory, game)}
+        <div className={styles["back"]}>
+            <div className={styles["title"]}>
+                {player.name}
+            </div>
+            <div className={styles["value"]}>
+                {value === "☕" ? <div>
+                    {value}
+                    <p>Pass</p>
+                </div>
+                    :
+                    value === "❓" ?
+                        <div>
+                            {value}
+                            <p>Not sure</p>
+                        </div> : value
+                }
+            </div>
         </div>
         {
             isModerator(game.createdById, currentPlayerId) &&
@@ -48,9 +63,9 @@ const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentStory }) 
 export default PlayerCard
 
 const getCardValue = (playerId: string, story: IStory, game: Game) => {
-    if (story.status !== Status.Finished) {
-        return story.values[playerId] === null ? '🤔' : '👍'
-    }
+    // if (story.status !== Status.Finished) {
+    //     return story.values[playerId] === null ? '🤔' : '👍'
+    // }
 
     if (story.status === Status.Finished) {
         if (story.values[playerId] !== null) {
@@ -59,7 +74,6 @@ const getCardValue = (playerId: string, story: IStory, game: Game) => {
             }
             return getCardDisplayValue(game.gameType, story.values[playerId]);
         }
-        return '🤔';
     }
 };
 

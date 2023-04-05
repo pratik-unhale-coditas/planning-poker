@@ -30,13 +30,15 @@ const JoinGameForm = () => {
     }
 
     const doesGameExist = async () => {
-        const res = await getGame(joinGameId)
-        return Boolean(res)
+        if (joinGameId) {
+            const res = await getGame(joinGameId)
+            return Boolean(res)
+        }
     }
 
     const onSubmit = async (e: any) => {
         e.preventDefault()
-        if (await doesGameExist()) {
+        if (await doesGameExist() && playerName.length) {
             const newPlayer = { name: playerName, id: ulid() };
             const res = await addPlayerToGame(joinGameId, newPlayer);
             if (res) {
@@ -90,8 +92,13 @@ const JoinGameForm = () => {
                     <div className={styles["header"]}>
                         <h2>Join Game</h2>
                         <button
-                            onClick={navigateToHome}
-                        ><img src="./icons/x.svg" alt="" /> Close</button>
+                            onClick={
+                                (event) => {
+                                    event.stopPropagation()
+                                    navigateToHome()
+                                }
+                            }
+                        ><img src="/icons/x.svg" alt="" /></button>
                     </div>
                     <div className={styles["main"]}>
                         <div className={styles["inputContainer"]}>
@@ -109,9 +116,14 @@ const JoinGameForm = () => {
                     <div className={styles["header"]}>
                         <h2>Join Game</h2>
                         <button
-
-                            onClick={navigateToHome}>
-                            <img src="./icons/x.svg" alt="" /> Close</button>
+                            onClick={
+                                (event) => {
+                                    event.stopPropagation()
+                                    navigateToHome()
+                                }
+                            }
+                        >
+                            <img src="/icons/x.svg" alt="" /></button>
                     </div>
                     <div className={styles["main"]}>
                         <div className={styles["submitButtonContainer"]}>

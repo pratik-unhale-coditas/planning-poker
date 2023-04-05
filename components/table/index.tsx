@@ -11,10 +11,13 @@ import styles from './table.module.scss'
 
 import { Status } from '@/types/status';
 import { ITableProps } from './table.types';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/repository/firebase';
 
 
 const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) => {
     const router = useRouter()
+    const [user] = useAuthState(auth)
 
     const { gid } = router.query
     const { protocol, host } = location;
@@ -54,13 +57,14 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
     }
 
     const leaveGame = () => {
-        router.push(`/dashboard`);
+        user ?
+            router.push(`/dashboard`) : router.push(`/`);
     };
 
     return (<div className={styles["table"]}>
         <div className={styles["infoContainer"]}>
             <div className={styles["title"]}>{currentStory?.name}</div>
-            <div className={styles["result"]}>Average : {currentStory?.average || 0}</div>
+            <div className={styles["result"]}>Average : {currentStory?.average || '-/-'}</div>
         </div>
         {isModerator(game.createdById, currentPlayerId) ?
             <div className={styles["utilityContainer"]}>

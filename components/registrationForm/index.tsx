@@ -89,10 +89,12 @@ const RegistrationForm = () => {
                         <label className={styles["label"]}>First Name</label>
                         <input name="firstName" className={styles["input"]} type={"text"} onChange={handleInput} />
                     </div>
+                    <p className={styles["inputWarningMessage"]}>{errors.firstName?.message}</p>
                     <div className={styles["inputContainer"]}>
                         <label className={styles["label"]}>Last Name</label>
                         <input name="lastName" className={styles["input"]} type={"text"} onChange={handleInput} />
                     </div>
+                    <p className={styles["inputWarningMessage"]}>{errors.lastName?.message}</p>
                     <div className={styles["inputContainer"]}>
                         <label className={styles["label"]}>Email</label>
                         <input name="email" className={styles["input"]} type={"email"} onChange={handleInput} />

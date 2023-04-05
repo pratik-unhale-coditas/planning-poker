@@ -22,6 +22,10 @@
     background-color: rgb(29, 154, 27);
     border-radius: 8px;
     color: white;
+    &:hover {
+      box-shadow: 1px 5px 6px rgba(0, 0, 0, 0.3);
+      transform: scale(1.05);
+    }
   }
 
   .searchFormContainer {

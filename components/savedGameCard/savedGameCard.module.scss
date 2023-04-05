@@ -10,20 +10,73 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  position: relative;
 
-  // .main {
-  //   display: flex;
-  //   gap: 1rem;
-  //   padding: 0.5rem;
-  //   border-radius: 8px;
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    .inviteLinkContainer {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      .inviteLinkPrompt {
+        font-size: 0.75rem;
+        color: rgb(167, 167, 167);
+      }
+      .copyLinkContainer {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        p {
+          word-break: break-word;
+          font-weight: 700;
+        }
+        .copyIcon {
+          padding: 0.5rem;
 
-  //   &:hover {
-  //     background-color: rgb(255, 228, 201);
-  //   }
-  // }
+          &:hover {
+            background-color: rgb(255, 228, 201);
+            border: none;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    .snapshotContainer {
+      display: flex;
+      gap: 1rem;
+      .snapshotItem {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-right: 1rem;
+        align-items: center;
+        border-right: 1px solid rgb(197, 197, 197);
+        .snapshotItemTitle {
+          font-size: 0.75rem;
+          color: rgb(167, 167, 167);
+        }
+        .snapshotItemValue {
+        }
+      }
+    }
+    .deckTypeContainer {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      .deckTypeTitle {
+        font-size: 0.75rem;
+        color: rgb(167, 167, 167);
+      }
+    }
+  }
   .deleteButton {
     display: none;
     padding: 0.5rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
 
     &:hover {
       background-color: rgb(255, 228, 201);

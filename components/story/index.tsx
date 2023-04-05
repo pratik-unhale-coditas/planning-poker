@@ -25,7 +25,12 @@ const Story: React.FC<IStoryProps> = ({ stories, game, selectedStory, handleStor
 
 
     return (<div className={styles["container"]}>
-        <div className={styles["title"]}>Story</div>
+        {stories?.length as number > 0 ?
+            <div className={styles["title"]}>
+                <p>Story</p>
+                <p>Score</p>
+            </div>
+            : null}
         <div className={styles["storyList"]}>
             {
                 stories?.map((story) => {
@@ -37,7 +42,7 @@ const Story: React.FC<IStoryProps> = ({ stories, game, selectedStory, handleStor
                             onClick={() => handleStorySelect(story)}
                         >
                             <div className={styles["storyName"]}>{story.name}</div>
-                            <div className={styles["storyAverage"]}>{story.average}</div>
+                            <div className={styles["storyAverage"]}>{story.average || '-/-'}</div>
                         </div>
                     )
                 })
@@ -46,11 +51,17 @@ const Story: React.FC<IStoryProps> = ({ stories, game, selectedStory, handleStor
         </div>
         {
             isModerator(game.createdById, currentPlayerId) ? <>
-                <div className={styles["addStory"]} onClick={() => setIsAddStoryModalOpen(!isAddStoryModalOpen)}>
-                    + Add Story
+                <div className={styles["addStoryContainer"]} >
+                    <div
+                        className={styles["addStory"]}
+                        onClick={() => setIsAddStoryModalOpen(!isAddStoryModalOpen)}
+                    >+ Add Story</div>
                 </div>
-                <div className={styles["footer"]} onClick={leaveGame}>
-                    X End Game
+                <div className={styles["footer"]} >
+                    <div
+                        className={styles["endGame"]}
+                        onClick={leaveGame}
+                    >  X End Game</div>
                 </div>
             </>
                 : null
