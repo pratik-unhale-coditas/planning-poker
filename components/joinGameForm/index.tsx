@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ulid } from 'ulidx';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useForm } from "react-hook-form"
+import * as Yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Snackbar from '../snackbar';
 
@@ -12,6 +15,13 @@ import { addPlayerToGame, isPlayerInGameStore } from '@/service/players';
 
 import styles from './joinGameForm.module.scss'
 
+const joinGameFormSchema = Yup.object().shape({
+    displayName: Yup.string().required("Display name is required"),
+});
+interface IJoinGameFormValues {
+    displayName: string;
+};
+
 
 const JoinGameForm = () => {
     const [user] = useAuthState(auth)
@@ -21,9 +31,9 @@ const JoinGameForm = () => {
     const { gid } = router.query
 
     const [joinGameId, setJoinGameId] = useState(gid as string);
-    const [playerName, setPlayerName] = useState('');
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const navigateToHome = () => {
         router.push('/')
@@ -36,10 +46,22 @@ const JoinGameForm = () => {
         }
     }
 
-    const onSubmit = async (e: any) => {
-        e.preventDefault()
-        if (await doesGameExist() && playerName.length) {
-            const newPlayer = { name: playerName, id: ulid() };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IJoinGameFormValues>({
+        resolver: yupResolver(joinGameFormSchema),
+        defaultValues: {
+            displayName: ''
+        },
+    });
+
+    const onSubmit = async (data: any) => {
+        setLoading(true)
+        const { displayName } = data
+        if (await doesGameExist()) {
+            const newPlayer = { name: displayName, id: ulid() };
             const res = await addPlayerToGame(joinGameId, newPlayer);
             if (res) {
                 router.push(`/game/${joinGameId}?id=${newPlayer.id}`);
@@ -49,6 +71,7 @@ const JoinGameForm = () => {
             setSnackbarMessage("Link not valid anymore")
             setShowSnackbar(true)
         }
+        setLoading(false)
     };
     const joinPlayer = async (e: any) => {
         e.preventDefault()
@@ -87,7 +110,7 @@ const JoinGameForm = () => {
         <>{
             !currentPlayerId ?
                 <form className={styles["container"]}
-                    onSubmit={onSubmit}
+                    onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className={styles["header"]}>
                         <h2>Join Game</h2>
@@ -103,10 +126,19 @@ const JoinGameForm = () => {
                     <div className={styles["main"]}>
                         <div className={styles["inputContainer"]}>
                             <label className={styles["label"]}>Display Name</label>
-                            <input name="name" className={styles["input"]} type={"text"} onChange={(e) => setPlayerName(e.target.value)} />
+                            <input
+                                className={styles["input"]}
+                                type={"text"}
+                                {...register('displayName')}
+                            />
                         </div>
+                        <p className={styles["inputWarningMessage"]}>{errors.displayName?.message}</p>
+
                         <div className={styles["submitButtonContainer"]}>
-                            <button className={styles["submitButton"]} type={"submit"}>Join</button>
+                            <button
+                                disabled={loading}
+                                className={styles["submitButton"]}
+                                type={"submit"}>Join</button>
                         </div>
                     </div>
                 </form>
