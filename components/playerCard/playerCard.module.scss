@@ -59,11 +59,18 @@
     .frontEmoji {
       flex-grow: 1;
     }
-    p {
+    .frontTitle {
+      width: 100%;
       background-color: white;
       padding: 0.25rem;
       border-radius: 8px;
-      font-size: 0.75rem;
+      p {
+        font-size: 0.75rem;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
   }
 

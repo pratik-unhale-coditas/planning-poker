@@ -29,7 +29,9 @@ const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentStory }) 
 
         <div className={styles["front"]}>
             <div className={styles["frontEmoji"]}>{currentStory.values[player.id] === null ? '🤔' : '👍'}</div>
-            <p>{player.name}</p>
+            <div className={styles["frontTitle"]}>
+                <p>{player.name}</p>
+            </div>
         </div>
         <div className={styles["back"]}>
             <div className={styles["title"]}>

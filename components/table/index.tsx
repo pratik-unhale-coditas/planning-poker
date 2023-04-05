@@ -113,10 +113,10 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
                 >
                     <div className={styles["utilityIcon"]}>
                         <Image
-                            src="/icons/logout.svg"
-                            alt=""
+                            src="/icons/logoutIcon.svg"
                             width={24}
                             height={24}
+                            alt=""
                         />
                     </div>
                     Exit</div>
@@ -139,7 +139,7 @@ const Table: React.FC<ITableProps> = ({ game, currentPlayerId, currentStory }) =
                 >
                     <div className={styles["utilityIcon"]}>
                         <Image
-                            src="/icons/logout.svg"
+                            src="/icons/logoutIcon.svg"
                             alt=""
                             width={24}
                             height={24}
