@@ -11,6 +11,7 @@ import styles from './header.module.scss'
 const Header = () => {
     const [user] = useAuthState(auth)
     const router = useRouter()
+    const { pathname } = router
     const { gid, id } = router.query
     const [isGuest, setIsGuest] = useState(false)
     const navigateToIndex = () => {
@@ -39,15 +40,21 @@ const Header = () => {
             <div className={styles["end"]}>
                 {user ?
                     <UserMenu userId={user.uid} />
-                    : isGuest ? <div className={styles["guestTab"]}>Guest</div> :
+                    : isGuest ?
+                        <div className={styles["guestTab"]}>Guest</div>
+                        :
                         <div className={styles["loginOptionsContainer"]}>
-                            <button className={styles["button"]}>
-                                <Link href={"/"} className={styles["loginPageLink"]}>Log In</Link>
-                            </button>
-                            <button className={[styles["button"], styles["registerButton"]].join(" ")}
-                            >
-                                <Link href={"/createNewAccount"} className={styles["createNewAccountLink"]}>      Register</Link>
-                            </button>
+                            {
+                                pathname !== "/" ?
+                                    <button className={styles["button"]}>
+                                        <Link href={"/"} className={styles["loginPageLink"]}>Log In</Link>
+                                    </button>
+                                    :
+                                    <button className={[styles["button"], styles["registerButton"]].join(" ")}
+                                    >
+                                        <Link href={"/createNewAccount"} className={styles["createNewAccountLink"]}>      Register</Link>
+                                    </button>
+                            }
                         </div>
                 }
             </div>
