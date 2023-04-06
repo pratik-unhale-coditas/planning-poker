@@ -70,7 +70,7 @@ const ForgotPassword = () => {
                 <Link href={'/'} className={styles["loginPageLink"]}>Go back to login page</Link>
             </div> :
 
-            <div>
+            <>
                 <form
                     className={styles["container"]}
                     onSubmit={handleSubmit(onSubmit)}
@@ -99,7 +99,7 @@ const ForgotPassword = () => {
                 {
                     showSnackbar ? <Snackbar message={snackbarMessage as string} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
                 }
-            </div>
+            </>
 
     )
 }
