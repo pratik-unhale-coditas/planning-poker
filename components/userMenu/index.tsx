@@ -10,12 +10,9 @@ import styles from './userMenu.module.scss'
 import { IUserMenuProps } from './userMenu.types'
 
 const UserMenu: React.FC<IUserMenuProps> = ({ userId }) => {
-
     const [user, setUser] = useState<any>(null)
-    const docRef = doc(db, "users", userId);
-
-
     const getUser = async () => {
+        const docRef = doc(db, "users", userId);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             setUser(docSnap.data())
@@ -32,7 +29,9 @@ const UserMenu: React.FC<IUserMenuProps> = ({ userId }) => {
         await signOut(auth)
         router.push('/')
     }
-
+    if (router.pathname === "/dashboard" || router.pathname === "/") {
+        getUser()
+    }
     const containerRef = useRef<any>(null)
 
     const handleClick = (event: any) => {

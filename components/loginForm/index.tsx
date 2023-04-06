@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 
 import Snackbar from '../snackbar';
 
@@ -33,10 +33,12 @@ const LoginForm = () => {
 
     const [
         signInWithEmailAndPassword,
-        user,
         loading,
         error,
     ] = useSignInWithEmailAndPassword(auth);
+
+    const [signInWithGoogle] =
+        useSignInWithGoogle(auth);
 
     const [showSnackbar, setShowSnackbar] = useState(false)
 
@@ -98,6 +100,19 @@ const LoginForm = () => {
             </div>
             <div className={styles["createNewAccount"]}>
                 <Link href={"createNewAccount"} className={styles["createNewAccountLink"]}>Create New Account</Link>
+            </div>
+            <div className={styles["googleLoginContainer"]}>
+                <button
+                    className={styles["googleLoginButton"]}
+                    onClick={() => signInWithGoogle()}
+                >
+                    <img
+                        className={styles["googleLogo"]}
+                        src="/icons/googleLogo.png" alt="" />
+                    <h2
+                        className={styles["googleLoginButtonText"]}
+                    >Sign in with google</h2>
+                </button>
             </div>
             {
                 showSnackbar ? <Snackbar message={`Error :- ${error}`} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null

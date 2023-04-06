@@ -24,9 +24,11 @@ const Profile = () => {
     const [showSnackbar, setShowSnackbar] = useState(false)
 
     const getUser = async () => {
-        const currentUser = await getUserFromStore(user?.uid as string)
-        if (currentUser) {
-            setCurrentUser(currentUser)
+        if (user) {
+            const currentUser = await getUserFromStore(user?.uid as string)
+            if (currentUser) {
+                setCurrentUser(currentUser)
+            }
         }
     }
     const handleUpdateProfile = async (data: any) => {
@@ -84,26 +86,29 @@ const Profile = () => {
                         />
                         : null
                 }
+                {user?.providerData[0].providerId === "password" ?
+                    <>
+                        <div className={styles["subTitle"]}>
+                            <h3>
+                                Password
+                            </h3>
+                            {!isEditingPassword ?
+                                <button
+                                    className={styles["editButton"]}
+                                    onClick={() => setIsEditingPassword(!isEditingPassword)}
+                                ><img src="/icons/edit.svg" alt="" /></button>
+                                : null
+                            }
+                        </div>
+                        <div className={isEditingPassword ? styles["passwordSection"] : styles["passwordSectionHidden"]}>
 
-                <div className={styles["subTitle"]}>
-                    <h3>
-                        Password
-                    </h3>
-                    {!isEditingPassword ?
-                        <button
-                            className={styles["editButton"]}
-                            onClick={() => setIsEditingPassword(!isEditingPassword)}
-                        ><img src="/icons/edit.svg" alt="" /></button>
-                        : null
-                    }
-                </div>
-                <div className={isEditingPassword ? styles["passwordSection"] : styles["passwordSectionHidden"]}>
-
-                    <PasswordForm
-                        onSubmit={handleUpdatePassword}
-                        onCancel={() => setIsEditingPassword(false)}
-                    />
-                </div>
+                            <PasswordForm
+                                onSubmit={handleUpdatePassword}
+                                onCancel={() => setIsEditingPassword(false)}
+                            />
+                        </div>
+                    </> : null
+                }
             </div>
             {
                 showSnackbar ? <Snackbar message={error ? `Error :- ${error}` : "Password changed successfully"} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
