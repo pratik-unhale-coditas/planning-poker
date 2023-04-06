@@ -17,10 +17,9 @@ const CreateGameForm = () => {
 
     const [user] = useAuthState(auth)
     const [currentPlayer, setCurrentPlayer] = useState<any>(null)
-    const docRef = doc(db, "users", user?.uid as string);
-
 
     const getUser = async () => {
+        const docRef = doc(db, "users", user?.uid as string);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             setCurrentPlayer(docSnap.data())
@@ -73,7 +72,9 @@ const CreateGameForm = () => {
         }
     }
     useEffect(() => {
-        getUser()
+        if (user) {
+            getUser()
+        }
     }, [])
 
     return (
