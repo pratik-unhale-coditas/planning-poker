@@ -6,8 +6,6 @@ import { useForm } from "react-hook-form"
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Snackbar from '../snackbar';
-
 import { auth, getUserFromStore, updateUserGamesInStore } from '@/repository/firebase';
 
 import { getGame } from '@/service/games';
@@ -31,12 +29,16 @@ const JoinGameForm = () => {
     const { gid } = router.query
 
     const [joinGameId, setJoinGameId] = useState(gid as string);
-    const [showSnackbar, setShowSnackbar] = useState(false)
-    const [snackbarMessage, setSnackbarMessage] = useState("")
     const [loading, setLoading] = useState(false)
+    const [gameExist, setGameExist] = useState(false)
 
     const navigateToHome = () => {
         router.push('/')
+    }
+
+    const checkIfGameExists = async () => {
+        const res = await doesGameExist()
+        setGameExist(Boolean(res))
     }
 
     const doesGameExist = async () => {
@@ -68,10 +70,6 @@ const JoinGameForm = () => {
                 router.push(`/game/${joinGameId}?id=${newPlayer.id}`);
             }
         }
-        else if (!(await doesGameExist())) {
-            setSnackbarMessage("Link not valid anymore")
-            setShowSnackbar(true)
-        }
         setLoading(false)
     };
     const joinPlayer = async (e: any) => {
@@ -86,10 +84,7 @@ const JoinGameForm = () => {
                 router.push(`/game/${joinGameId}`);
             }
         }
-        else if (!(await doesGameExist())) {
-            setSnackbarMessage("Link not valid anymore")
-            setShowSnackbar(true)
-        }
+
     }
 
     useEffect(() => {
@@ -105,76 +100,72 @@ const JoinGameForm = () => {
                     router.push(`/game/${joinGameId}?id=${playerIdInCache}`);
                 }
             }
-            else if (!(await doesGameExist())) {
-                setSnackbarMessage("Link not valid anymore")
-                setShowSnackbar(true)
-            }
+
         }
         fetchData();
-        // isPlayerInCache()
+        checkIfGameExists();
     }, [joinGameId, history, currentPlayerId]);
 
     return (
         <>{
-            !currentPlayerId ?
-                <form className={styles["container"]}
-                    onSubmit={handleSubmit(onSubmit)}
-                >
-                    <div className={styles["header"]}>
-                        <h2>Join Game</h2>
-                        <button
-                            onClick={
-                                (event) => {
-                                    event.stopPropagation()
-                                    navigateToHome()
-                                }
-                            }
-                        ><img src="/icons/x.svg" alt="" /></button>
-                    </div>
-                    <div className={styles["main"]}>
-                        <div className={styles["inputContainer"]}>
-                            <label className={styles["label"]}>Display Name</label>
-                            <input
-                                className={styles["input"]}
-                                type={"text"}
-                                {...register('displayName')}
-                            />
-                        </div>
-                        <p className={styles["inputWarningMessage"]}>{errors.displayName?.message}</p>
-
-                        <div className={styles["submitButtonContainer"]}>
+            gameExist ? (
+                !currentPlayerId ?
+                    <form className={styles["container"]}
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <div className={styles["header"]}>
+                            <h2>Join Game</h2>
                             <button
-                                disabled={loading}
-                                className={styles["submitButton"]}
-                                type={"submit"}>Join</button>
-                        </div>
-                    </div>
-                </form>
-                : <form
-                    className={styles["container"]}
-                    onSubmit={joinPlayer}>
-                    <div className={styles["header"]}>
-                        <h2>Join Game</h2>
-                        <button
-                            onClick={
-                                (event) => {
-                                    event.stopPropagation()
-                                    navigateToHome()
+                                onClick={
+                                    (event) => {
+                                        event.stopPropagation()
+                                        navigateToHome()
+                                    }
                                 }
-                            }
-                        >
-                            <img src="/icons/x.svg" alt="" /></button>
-                    </div>
-                    <div className={styles["main"]}>
-                        <div className={styles["submitButtonContainer"]}>
-                            <button className={styles["submitButton"]} type={"submit"}>Join</button>
+                            ><img src="/icons/x.svg" alt="" /></button>
                         </div>
-                    </div>
-                </form>
+                        <div className={styles["main"]}>
+                            <div className={styles["inputContainer"]}>
+                                <label className={styles["label"]}>Display Name</label>
+                                <input
+                                    className={styles["input"]}
+                                    type={"text"}
+                                    {...register('displayName')}
+                                />
+                            </div>
+                            <p className={styles["inputWarningMessage"]}>{errors.displayName?.message}</p>
+
+                            <div className={styles["submitButtonContainer"]}>
+                                <button
+                                    disabled={loading}
+                                    className={styles["submitButton"]}
+                                    type={"submit"}>Join</button>
+                            </div>
+                        </div>
+                    </form>
+                    : <form
+                        className={styles["container"]}
+                        onSubmit={joinPlayer}>
+                        <div className={styles["header"]}>
+                            <h2>Join Game</h2>
+                            <button
+                                onClick={
+                                    (event) => {
+                                        event.stopPropagation()
+                                        navigateToHome()
+                                    }
+                                }
+                            >
+                                <img src="/icons/x.svg" alt="" /></button>
+                        </div>
+                        <div className={styles["main"]}>
+                            <div className={styles["submitButtonContainer"]}>
+                                <button className={styles["submitButton"]} type={"submit"}>Join</button>
+                            </div>
+                        </div>
+                    </form>) : <>Link not valid anymore</>
         }
-            {
-                showSnackbar ? <Snackbar message={snackbarMessage as string} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
-            }
+
         </>
     )
 }
