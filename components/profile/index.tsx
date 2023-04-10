@@ -3,6 +3,7 @@ import { useAuthState, useUpdatePassword } from "react-firebase-hooks/auth"
 import { useForm } from "react-hook-form"
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup"
+import Image from "next/image";
 
 import { auth, getUserFromStore, updateUserDataInStore } from "@/repository/firebase"
 
@@ -70,7 +71,9 @@ const Profile = () => {
                         <button
                             className={styles["editButton"]}
                             onClick={() => setIsEditingPersonalDetails(!isEditingPersonalDetails)}
-                        ><img src="/icons/edit.svg" alt="" /></button>
+                        >
+                            <Image src="/icons/edit.svg" alt="" width={24} height={24} />
+                        </button>
                         : null
                     }
                 </div>
@@ -96,7 +99,9 @@ const Profile = () => {
                                 <button
                                     className={styles["editButton"]}
                                     onClick={() => setIsEditingPassword(!isEditingPassword)}
-                                ><img src="/icons/edit.svg" alt="" /></button>
+                                >
+                                    <Image src="/icons/edit.svg" alt="" width={24} height={24} />
+                                </button>
                                 : null
                             }
                         </div>

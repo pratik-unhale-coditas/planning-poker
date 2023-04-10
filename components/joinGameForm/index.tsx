@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from "react-hook-form"
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
+import Image from 'next/image';
 
 import { auth, getUserFromStore, updateUserGamesInStore } from '@/repository/firebase';
 
@@ -122,7 +123,7 @@ const JoinGameForm = () => {
                                         navigateToHome()
                                     }
                                 }
-                            ><img src="/icons/x.svg" alt="" /></button>
+                            ><Image width={24} height={24} src="/icons/x.svg" alt="" /></button>
                         </div>
                         <div className={styles["main"]}>
                             <div className={styles["inputContainer"]}>
@@ -156,7 +157,7 @@ const JoinGameForm = () => {
                                     }
                                 }
                             >
-                                <img src="/icons/x.svg" alt="" /></button>
+                                <Image width={24} height={24} src="/icons/x.svg" alt="" /></button>
                         </div>
                         <div className={styles["main"]}>
                             <div className={styles["submitButtonContainer"]}>

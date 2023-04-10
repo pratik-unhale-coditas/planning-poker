@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
+import Image from 'next/image';
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
@@ -106,7 +107,9 @@ const LoginForm = () => {
                     className={styles["googleLoginButton"]}
                     onClick={() => signInWithGoogle()}
                 >
-                    <img
+                    <Image
+                        width={32}
+                        height={32}
                         className={styles["googleLogo"]}
                         src="/icons/googleLogo.png" alt="" />
                     <h2

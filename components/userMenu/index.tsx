@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
+import Image from 'next/image';
 import { doc, getDoc } from "firebase/firestore";
 import { signOut } from 'firebase/auth'
 
@@ -64,7 +65,7 @@ const UserMenu: React.FC<IUserMenuProps> = ({ userId }) => {
         >
             <button className={styles["userButton"]} onClick={() => setOpen(!open)}>
                 {user ? `${user.firstName} ${user.lastName}` : 'User'}
-                {open ? <img src="/icons/chevronUp.svg" alt="" /> : <img src="/icons/chevronDown.svg" alt="" />}
+                {open ? <Image width={24} height={24} src="/icons/chevronUp.svg" alt="" /> : <Image width={24} height={24} src="/icons/chevronDown.svg" alt="" />}
             </button>
             {open ? <div className={styles['userMenu']}>
                 <button className={styles["userMenuItem"]}

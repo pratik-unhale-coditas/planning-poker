@@ -1,5 +1,6 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/repository/firebase";
+import Image from "next/image";
 
 import { getCards } from "../constants/deck";
 import { removePlayer } from "@/service/players";
@@ -57,7 +58,7 @@ const PlayerCard: React.FC<IPlayerCardProps> = ({ game, player, currentStory }) 
             <div
                 className={styles["deleteButton"]}
                 onClick={() => removeUser(game.id, player.id)}
-            ><img src="/icons/trash.svg" /></div>
+            ><Image width={24} height={24} src="/icons/trash.svg" alt="" /></div>
         }
     </div>
     )

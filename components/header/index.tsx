@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, getPlayerFromStore } from '@/repository/firebase'
@@ -34,7 +35,7 @@ const Header = () => {
         <header className={styles["header"]}>
             <div className={styles["start"]}>
                 <div className={styles["logo"]} onClick={navigateToIndex}>
-                    <img src="/icons/planningPokerLogo.png" alt="" />
+                    <Image width={128} height={48} src="/icons/planningPokerLogo.png" alt="" />
                 </div>
             </div>
             <div className={styles["end"]}>

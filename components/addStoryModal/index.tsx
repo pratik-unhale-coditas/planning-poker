@@ -1,4 +1,5 @@
 import { useState } from "react"
+import Image from "next/image"
 
 import Modal from "../modal"
 
@@ -23,7 +24,9 @@ const AddStoryModal: React.FC<IAddStoryModal> = ({ handleCloseModal, gameId, pla
         <div className={styles["container"]}>
             <div className={styles["header"]}>
                 <div className={styles["title"]}>Add new story</div>
-                <div className={styles["close"]} onClick={handleCloseModal}> <img src="/icons/x.svg" alt="" /></div>
+                <div className={styles["close"]} onClick={handleCloseModal}>
+                    <Image width={24} height={24} src="/icons/x.svg" alt="" />
+                </div>
             </div>
             <div className={styles["inputContainer"]}>
                 <label className={styles["label"]}>Name</label>

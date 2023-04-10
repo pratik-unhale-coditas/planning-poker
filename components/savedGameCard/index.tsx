@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import Image from "next/image"
 import { useAuthState } from 'react-firebase-hooks/auth'
 import moment from "moment"
 
@@ -79,7 +80,7 @@ const SavedGameCard = ({ recentGame, handleRemoveGame }: ISavedGameCardProps) =>
                                 }
                             }
                         >
-                            <img
+                            <Image width={24} height={24}
                                 src="/icons/copy.svg"
                                 alt=""
                             />
@@ -110,7 +111,7 @@ const SavedGameCard = ({ recentGame, handleRemoveGame }: ISavedGameCardProps) =>
                     e.stopPropagation()
                     setIsDeleteModalOpen(true)
                 }}>
-                    <img src="/icons/trash.svg" alt="" />
+                    <Image width={24} height={24} src="/icons/trash.svg" alt="" />
                 </div>
                 : null
             }
