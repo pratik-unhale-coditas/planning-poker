@@ -10,6 +10,8 @@ import { auth, db } from '@/repository/firebase';
 
 import styles from './registrationForm.module.scss'
 import { IRegistrationFormInputs } from "./registrationForm.types";
+import { useState } from "react";
+import Snackbar from "../snackbar";
 
 const schema = Yup.object({
     firstName: Yup.string().required('First Name Required'),
@@ -22,6 +24,10 @@ const schema = Yup.object({
 });
 
 const RegistrationForm = () => {
+
+    const [showSnackbar, setShowSnackbar] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState<string>("")
+
     const [
         createUserWithEmailAndPassword,
         user,
@@ -54,11 +60,13 @@ const RegistrationForm = () => {
                         email: email,
                         id: res.user.uid
                     }
-
                     );
-
+                    router.push('/dashboard')
                 }
-                router.push('/dashboard')
+                if (error) {
+                    setShowSnackbar(true)
+                    setSnackbarMessage(error.toString())
+                }
             }
         } catch (e) {
             console.log(e)
@@ -114,7 +122,9 @@ const RegistrationForm = () => {
                     </div>
                 </div>
             </form>
-
+            {
+                showSnackbar ? <Snackbar message={`Error :- ${snackbarMessage}`} showSnackbar={true} hideSnackbar={() => setShowSnackbar(false)} /> : null
+            }
         </div>
     )
 }
