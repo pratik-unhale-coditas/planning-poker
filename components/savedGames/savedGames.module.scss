@@ -41,13 +41,16 @@
   }
 
   .savedGamesContainer {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    flex-wrap: wrap;
   }
 }
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
+    .savedGamesContainer {
+      grid-template-columns: 1fr;
+    }
   }
 }
